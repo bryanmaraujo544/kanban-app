@@ -1,11 +1,10 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  padding: 3.2rem;
-  background: #f0ecfe;
-  min-height: 100vh;
-  height: 100%;
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
+  gap: 0.8rem;
+  padding: 1.2rem;
+  background: #f0ecfe;
+  font-size: 1.6rem;
 `;

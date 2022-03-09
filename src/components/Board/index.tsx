@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { BoardContext } from '../../contexts/BoardContext';
+import { Column } from '../Column';
 import { Container } from './styles';
 
 export function Board() {
@@ -8,7 +9,9 @@ export function Board() {
   console.log({ allTasks, columnsInfos, columnsOrder });
   return (
     <Container>
-      <h1>Board</h1>
+      {columnsInfos.map(({ id, tasksIds, title }) => (
+        <Column key={id} id={id} title={title} tasksIds={tasksIds} />
+      ))}
     </Container>
   );
 }
