@@ -1,10 +1,11 @@
-import { useContext, useState } from 'react';
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import { useContext, useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 
 import { BoardContext } from '../../contexts/BoardContext';
 import { Modal } from '../Modal';
 import { Task } from '../Task';
-import { Container, TasksContainer } from './styles';
+import { Container, TasksContainer, TextArea, ModalForm } from './styles';
 
 interface ColumnProps {
   title: string;
@@ -13,9 +14,16 @@ interface ColumnProps {
 }
 
 export function Column({ title, id, tasksIds }: ColumnProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   console.log(id);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newCardTitle, setNewCardTitle] = useState('');
   const { allTasks } = useContext(BoardContext);
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      setNewCardTitle('');
+    }
+  }, [isModalOpen]);
 
   const tasks = tasksIds.map((taskId) =>
     allTasks.find((task) => task.id === taskId)
@@ -38,8 +46,21 @@ export function Column({ title, id, tasksIds }: ColumnProps) {
           ))}
         </TasksContainer>
       </Container>
-      <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen}>
-        <p>uoool modal</p>
+      <Modal
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        modalTitle="Create Card"
+      >
+        <ModalForm>
+          <TextArea
+            placeholder="Enter the card title"
+            value={newCardTitle}
+            onChange={(e) => setNewCardTitle(e.target.value)}
+          />
+          <button type="submit" className="modal-btn">
+            Create
+          </button>
+        </ModalForm>
       </Modal>
     </>
   );

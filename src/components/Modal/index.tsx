@@ -1,6 +1,7 @@
 import { ReactNode, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { motion, useAnimation } from 'framer-motion';
+import { IoClose } from 'react-icons/io5';
 
 import { Container, ModalContainer } from './styles';
 import { overlayVariants } from '../../variants/Modal/overlayVariants';
@@ -10,15 +11,18 @@ interface Props {
   children: ReactNode;
   isOpen: boolean;
   setIsOpen: any;
+  modalTitle: string;
 }
 
-export const Modal = ({ children, isOpen, setIsOpen }: Props) => {
+export const Modal = ({ children, isOpen, setIsOpen, modalTitle }: Props) => {
   console.log({ setIsOpen });
   const overlayControls = useAnimation();
 
   useEffect(() => {
     if (isOpen) {
       overlayControls.start('show');
+    } else {
+      overlayControls.start('hidden');
     }
   }, [isOpen]);
 
@@ -29,7 +33,16 @@ export const Modal = ({ children, isOpen, setIsOpen }: Props) => {
       variants={overlayVariants}
     >
       <ModalContainer as={motion.div} variants={modalVariants}>
-        <h1>Modal</h1>
+        <div className="header">
+          <p className="title">{modalTitle}</p>
+          <button
+            type="button"
+            className="close-btn"
+            onClick={() => setIsOpen(false)}
+          >
+            <IoClose className="icon" />
+          </button>
+        </div>
         {children}
       </ModalContainer>
     </Container>,

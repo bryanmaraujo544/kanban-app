@@ -1,10 +1,10 @@
 export const modalVariants = {
   hidden: {
     opacity: 0,
-    y: 64,
+    scale: 0.25,
   },
   show: {
     opacity: 1,
-    y: 0,
+    scale: 1,
   },
 };
