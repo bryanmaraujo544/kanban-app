@@ -9,8 +9,11 @@ interface TaskProps {
 export function Task({ id, content, label }: TaskProps) {
   console.log(id, label);
   return (
-    <Container>
+    <Container label={label}>
       <p>{content}</p>
+      <div className="footer">
+        <div className="tag" />
+      </div>
     </Container>
   );
 }

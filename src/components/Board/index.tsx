@@ -5,8 +5,8 @@ import { Container } from './styles';
 
 export function Board() {
   const { allTasks, columnsInfos, columnsOrder } = useContext(BoardContext);
-
   console.log({ allTasks, columnsInfos, columnsOrder });
+
   return (
     <Container>
       {columnsInfos.map(({ id, tasksIds, title }) => (
