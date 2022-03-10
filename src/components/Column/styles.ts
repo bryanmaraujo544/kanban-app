@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+interface TagProps {
+  color: string;
+}
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -49,6 +53,11 @@ export const ModalForm = styled.form`
   gap: 1.2rem;
   margin-top: 0.8rem;
 
+  .tags {
+    display: flex;
+    gap: 0.8rem;
+  }
+
   .modal-btn {
     border: 0;
     background: #343a40;
@@ -58,6 +67,7 @@ export const ModalForm = styled.form`
     transition: background 0.2s linear;
     font-size: 1.6rem;
     font-size: 500;
+    margin-top: 1.2rem;
 
     &:hover {
       background: #000;
@@ -67,4 +77,17 @@ export const ModalForm = styled.form`
       background: #343a40;
     }
   }
+`;
+
+export const Tag = styled.div<TagProps>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 2rem;
+  padding: 0.2rem;
+  color: #fff;
+  border-radius: 0.4rem;
+  background: ${({ color }) => color};
+  cursor: pointer;
 `;
