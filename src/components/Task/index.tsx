@@ -1,4 +1,4 @@
-import { Container } from './styles';
+import { Container, Tag } from './styles';
 
 interface TaskProps {
   id: string;
@@ -12,7 +12,7 @@ export function Task({ id, content, label }: TaskProps) {
     <Container label={label}>
       <p>{content}</p>
       <div className="footer">
-        <div className="tag" />
+        <Tag className="tag" label={label} />
       </div>
     </Container>
   );
