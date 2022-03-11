@@ -17,7 +17,19 @@ export const Container = styled.div`
   .header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
+    .edit-form {
+      input {
+        background: #f0ecfe;
+        border: none;
+        font-size: 1.8rem;
+        font-weight: 700;
+        padding: 0.4rem;
+        border-radius: 0.4rem;
+        outline: none;
+      }
+    }
     .add-icon {
       font-size: 2.4rem;
       color: #0f013c;

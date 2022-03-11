@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import { useContext, useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BsCheck } from 'react-icons/bs';
@@ -21,21 +20,23 @@ const cardsTags = [
 ];
 
 export function Column({ title, id, tasksIds }: ColumnProps) {
-  console.log(id);
+  const [isToEditColumnTitle, setIsToEditColumnTitle] = useState(false);
+  const [newColumnTitle, setNewColumnTitle] = useState(title);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newCardTitle, setNewCardTitle] = useState('');
   const [newCardTag, setNewCardTag] = useState('');
+
   const { allTasks, setAllTasks, setColumnsInfos } = useContext(BoardContext);
+  const tasks = tasksIds.map((taskId) =>
+    allTasks.find((task) => task.id === taskId)
+  );
 
   useEffect(() => {
     if (!isModalOpen) {
       setNewCardTitle('');
     }
   }, [isModalOpen]);
-
-  const tasks = tasksIds.map((taskId) =>
-    allTasks.find((task) => task.id === taskId)
-  );
 
   function handleCreateCard(e: any) {
     e.preventDefault();
@@ -64,11 +65,37 @@ export function Column({ title, id, tasksIds }: ColumnProps) {
     setIsModalOpen(false);
   }
 
+  function handleUpdateColumnTitle(e: any) {
+    e.preventDefault();
+    setIsToEditColumnTitle(false);
+    setColumnsInfos((prevColumns: any) =>
+      prevColumns.map((column: any) => {
+        if (column.id === id) {
+          return { ...column, title: newColumnTitle };
+        }
+        return column;
+      })
+    );
+  }
+
   return (
     <>
       <Container>
         <header className="header">
-          <h3>{title}</h3>
+          {isToEditColumnTitle ? (
+            <form
+              className="edit-form"
+              onSubmit={(e) => handleUpdateColumnTitle(e)}
+            >
+              <input
+                value={newColumnTitle}
+                onChange={(e) => setNewColumnTitle(e.target.value)}
+                autoFocus
+              />
+            </form>
+          ) : (
+            <h3 onClick={() => setIsToEditColumnTitle(true)}>{title}</h3>
+          )}
           <AiOutlinePlus
             className="add-icon"
             onClick={() => setIsModalOpen(true)}
