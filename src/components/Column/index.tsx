@@ -25,7 +25,7 @@ export function Column({ title, id, tasksIds }: ColumnProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newCardTitle, setNewCardTitle] = useState('');
   const [newCardTag, setNewCardTag] = useState('');
-  const { allTasks } = useContext(BoardContext);
+  const { allTasks, setAllTasks, setColumnsInfos } = useContext(BoardContext);
 
   useEffect(() => {
     if (!isModalOpen) {
@@ -39,6 +39,27 @@ export function Column({ title, id, tasksIds }: ColumnProps) {
 
   function handleCreateCard(e: any) {
     e.preventDefault();
+
+    const task = {
+      id: newCardTitle.replace(' ', ''),
+      content: newCardTitle,
+      label: newCardTag,
+    };
+
+    setAllTasks((prevAllTasks: any) => [...prevAllTasks, task]);
+
+    setColumnsInfos((prevColumn: any) =>
+      prevColumn.map(({ id: columnId, title, tasksIds }: any) => {
+        if (columnId === id) {
+          return {
+            id,
+            title,
+            tasksIds: [...tasksIds, newCardTitle.replace(' ', '')],
+          };
+        }
+        return { id: columnId, title, tasksIds };
+      })
+    );
 
     setIsModalOpen(false);
   }

@@ -12,6 +12,13 @@ export function Board() {
       {columnsInfos.map(({ id, tasksIds, title }) => (
         <Column key={id} id={id} title={title} tasksIds={tasksIds} />
       ))}
+      <div>
+        {allTasks.map(({ id, content, label }) => (
+          <div>
+            {id}, {content}, {label}
+          </div>
+        ))}
+      </div>
     </Container>
   );
 }
