@@ -47,4 +47,9 @@ export const Tag = styled.div<TagProps>`
   border-radius: 0.2rem;
   background: ${({ label }) =>
     label === 'green' ? '#70e000' : label === 'red' ? '#ef233c' : '#f9a620'};
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
 `;

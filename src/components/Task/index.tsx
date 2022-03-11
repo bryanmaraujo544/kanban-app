@@ -33,9 +33,27 @@ export function Task({ id, content, label }: TaskProps) {
     setIsToEdit(false);
   }
 
+  function spinTag(oldTag: string) {
+    if (oldTag === 'green') return 'orange';
+    if (oldTag === 'orange') return 'red';
+    return 'green';
+  }
+
+  function handleChangeTag() {
+    setAllTasks((prevTasks: any) =>
+      prevTasks.map((task: any) => {
+        if (task.id === id) {
+          const newTag = spinTag(task.label);
+          return { ...task, label: newTag };
+        }
+        return task;
+      })
+    );
+  }
+
   return (
     <Container label={label}>
-      <Tag className="tag" label={label} />
+      <Tag className="tag" label={label} onClick={() => handleChangeTag()} />
       {isToEdit ? (
         <form
           onSubmit={(e) => handleUpdateTaskContent(e)}
