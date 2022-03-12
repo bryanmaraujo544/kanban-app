@@ -22,6 +22,10 @@ export const Container = styled.div`
     align-items: center;
     padding: 0 0.8rem;
 
+    h3 {
+      color: #495057;
+    }
+
     .edit-form {
       input {
         background: #f0ecfe;
@@ -35,13 +39,40 @@ export const Container = styled.div`
     }
     .add-icon {
       font-size: 2.4rem;
-      color: #0f013c;
+      color: #495057;
       cursor: pointer;
       transition: color 0.2s linear;
 
       &:hover {
-        color: #7a52fc;
+        color: #000;
       }
+    }
+  }
+
+  .add-card-btn {
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    background: #e9ecef;
+    color: #6c757d;
+    padding: 0.4rem;
+    border-radius: 0.4rem;
+    box-shadow: 0 0.1rem 0.2rem #00000010;
+    transition: all 0.2s linear;
+
+    &:hover {
+      background: #ced4da;
+      color: #495057;
+    }
+
+    .add-icon {
+      font-size: 1.8rem;
+    }
+
+    p {
+      font-weight: 500;
     }
   }
 `;
@@ -49,7 +80,7 @@ export const Container = styled.div`
 export const TasksContainer = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 12.5rem;
+  min-height: 3.2rem;
   flex: 1;
   overflow-y: scroll;
   padding: 0 0.8rem;

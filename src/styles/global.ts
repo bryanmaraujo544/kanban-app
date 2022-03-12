@@ -19,6 +19,14 @@ const global = createGlobalStyle`
   button {
     cursor: pointer;
   }
+
+  :root {
+    --toastify-color-error: #ef233c !important;
+    --toastify-color-warning: #f9a620;
+    --toastify-color-success: #70e000;
+    --toastify-toast-min-height: 2.4rem !important;
+    --toastify-font-family: -apple-system !important;
+  }
 `;
 
 export default global;

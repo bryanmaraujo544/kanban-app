@@ -1,8 +1,10 @@
+/* eslint-disable no-alert */
 /* eslint-disable react/jsx-props-no-spreading */
 import { useContext, useEffect, useState } from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BsCheck } from 'react-icons/bs';
+import { toast } from 'react-toastify';
 
 import { BoardContext } from '../../contexts/BoardContext';
 import { Modal } from '../Modal';
@@ -28,7 +30,7 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newCardTitle, setNewCardTitle] = useState('');
-  const [newCardTag, setNewCardTag] = useState('');
+  const [newCardTag, setNewCardTag] = useState('green');
 
   const { allTasks, setAllTasks, setColumnsInfos } = useContext(BoardContext);
 
@@ -44,6 +46,11 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
 
   function handleCreateCard(e: any) {
     e.preventDefault();
+
+    if (!newCardTitle) {
+      toast.error('Type something');
+      return;
+    }
 
     const task = {
       id: newCardTitle.replace(' ', ''),
@@ -111,25 +118,36 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
                 onClick={() => setIsModalOpen(true)}
               />
             </header>
-            <Droppable droppableId={id} type="task">
-              {(provided) => (
-                <TasksContainer
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  {tasks.map(({ id: taskId, content, label }: any, index) => (
-                    <Task
-                      key={taskId}
-                      id={taskId}
-                      content={content}
-                      label={label}
-                      index={index}
-                    />
-                  ))}
-                  {provided.placeholder}
-                </TasksContainer>
-              )}
-            </Droppable>
+            {tasks.length === 0 ? (
+              <button
+                type="button"
+                className="add-card-btn"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <AiOutlinePlus className="add-icon" />
+                <p>Add card</p>
+              </button>
+            ) : (
+              <Droppable droppableId={id} type="task">
+                {(provided) => (
+                  <TasksContainer
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                  >
+                    {tasks.map(({ id: taskId, content, label }: any, index) => (
+                      <Task
+                        key={taskId}
+                        id={taskId}
+                        content={content}
+                        label={label}
+                        index={index}
+                      />
+                    ))}
+                    {provided.placeholder}
+                  </TasksContainer>
+                )}
+              </Droppable>
+            )}
           </Container>
         )}
       </Draggable>

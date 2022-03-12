@@ -41,7 +41,7 @@ export const ModalContainer = styled.div`
       display: flex;
 
       &:hover .icon {
-        color: #0f013c;
+        color: #000;
       }
 
       .icon {
