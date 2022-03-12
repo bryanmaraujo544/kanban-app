@@ -1,4 +1,6 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { useContext, useEffect, useState } from 'react';
+import { Draggable } from 'react-beautiful-dnd';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BsCheck } from 'react-icons/bs';
 
@@ -11,6 +13,7 @@ interface ColumnProps {
   title: string;
   id: string;
   tasksIds: string[];
+  index: number;
 }
 
 const cardsTags = [
@@ -19,7 +22,7 @@ const cardsTags = [
   { name: 'red', color: '#ef233c' },
 ];
 
-export function Column({ title, id, tasksIds }: ColumnProps) {
+export function Column({ title, id, tasksIds, index }: ColumnProps) {
   const [isToEditColumnTitle, setIsToEditColumnTitle] = useState(false);
   const [newColumnTitle, setNewColumnTitle] = useState(title);
 
@@ -80,33 +83,42 @@ export function Column({ title, id, tasksIds }: ColumnProps) {
 
   return (
     <>
-      <Container>
-        <header className="header">
-          {isToEditColumnTitle ? (
-            <form
-              className="edit-form"
-              onSubmit={(e) => handleUpdateColumnTitle(e)}
-            >
-              <input
-                value={newColumnTitle}
-                onChange={(e) => setNewColumnTitle(e.target.value)}
-                autoFocus
+      <Draggable draggableId={id} index={index}>
+        {(provided) => (
+          <Container
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            ref={provided.innerRef}
+          >
+            <header className="header">
+              {isToEditColumnTitle ? (
+                <form
+                  className="edit-form"
+                  onSubmit={(e) => handleUpdateColumnTitle(e)}
+                >
+                  <input
+                    value={newColumnTitle}
+                    onChange={(e) => setNewColumnTitle(e.target.value)}
+                    autoFocus
+                  />
+                </form>
+              ) : (
+                <h3 onClick={() => setIsToEditColumnTitle(true)}>{title}</h3>
+              )}
+              <AiOutlinePlus
+                className="add-icon"
+                onClick={() => setIsModalOpen(true)}
               />
-            </form>
-          ) : (
-            <h3 onClick={() => setIsToEditColumnTitle(true)}>{title}</h3>
-          )}
-          <AiOutlinePlus
-            className="add-icon"
-            onClick={() => setIsModalOpen(true)}
-          />
-        </header>
-        <TasksContainer>
-          {tasks.map(({ id: taskId, content, label }: any) => (
-            <Task id={taskId} content={content} label={label} />
-          ))}
-        </TasksContainer>
-      </Container>
+            </header>
+            <TasksContainer>
+              {tasks.map(({ id: taskId, content, label }: any) => (
+                <Task id={taskId} content={content} label={label} />
+              ))}
+            </TasksContainer>
+          </Container>
+        )}
+      </Draggable>
+
       <Modal
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}
@@ -120,7 +132,7 @@ export function Column({ title, id, tasksIds }: ColumnProps) {
           />
           <div className="tags">
             {cardsTags.map(({ name, color }) => (
-              <Tag color={color} onClick={() => setNewCardTag(name)}>
+              <Tag color={color} onClick={() => setNewCardTag(name)} key={name}>
                 {name === newCardTag && <BsCheck />}
               </Tag>
             ))}
