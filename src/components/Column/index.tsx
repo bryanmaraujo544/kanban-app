@@ -31,8 +31,9 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
   const [newCardTag, setNewCardTag] = useState('');
 
   const { allTasks, setAllTasks, setColumnsInfos } = useContext(BoardContext);
-  const tasks = tasksIds.map((taskId) =>
-    allTasks.find((task) => task.id === taskId)
+
+  const tasks = tasksIds.map(
+    (taskId) => allTasks.filter((task) => task.id === taskId)[0]
   );
 
   useEffect(() => {
@@ -118,6 +119,7 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
                 >
                   {tasks.map(({ id: taskId, content, label }: any, index) => (
                     <Task
+                      key={taskId}
                       id={taskId}
                       content={content}
                       label={label}

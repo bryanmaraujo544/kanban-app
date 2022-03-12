@@ -9,10 +9,14 @@ interface TagProps {
   label: string;
 }
 
+interface ContentProps {
+  isLarge?: boolean;
+}
+
 export const Container = styled.div<Props>`
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.6rem;
   padding: 1.2rem;
   background: #f0ecfe;
   font-size: 1.6rem;
@@ -20,13 +24,6 @@ export const Container = styled.div<Props>`
   margin: 0.8rem 0;
   max-width: 100%;
   width: 100%;
-
-  p {
-    font-size: 1.8rem;
-    font-weight: 500;
-    color: #495057;
-    word-break: break-word;
-  }
 
   .edit-form {
     margin-top: 0.8rem;
@@ -43,6 +40,13 @@ export const Container = styled.div<Props>`
       box-shadow: 0 0.1rem 0.3rem #00000002;
     }
   }
+`;
+
+export const Content = styled.p<ContentProps>`
+  font-size: ${({ isLarge }) => (isLarge ? '1.4rem' : '1.6rem')};
+  font-weight: 400;
+  color: #495057;
+  word-break: break-word;
 `;
 
 export const Tag = styled.div<TagProps>`

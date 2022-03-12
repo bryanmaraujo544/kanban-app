@@ -33,6 +33,17 @@ export function Board() {
     if (type === 'task') {
       if (source.droppableId === destination.droppableId) {
         // The card it was moved from one column to the same column
+        setColumnsInfos((prevColumnInfos: any) =>
+          prevColumnInfos.map((column: any) => {
+            if (column.id === destination.droppableId) {
+              const newTasksOrder = [...column.tasksIds];
+              newTasksOrder.splice(source.index, 1);
+              newTasksOrder.splice(destination.index, 0, draggableId);
+              return { ...column, tasksIds: newTasksOrder };
+            }
+            return column;
+          })
+        );
       } else {
         // Card it was moved from one column to the other column
         setColumnsInfos((prevColumnInfos: any) =>
@@ -45,6 +56,7 @@ export function Board() {
             }
 
             if (column.id === destination.droppableId) {
+              // add the card in the new column
               const newTasksIds = [...column.tasksIds];
               newTasksIds.splice(destination.index, 0, draggableId);
               return { ...column, tasksIds: newTasksIds };

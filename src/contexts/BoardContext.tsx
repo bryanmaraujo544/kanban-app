@@ -33,13 +33,15 @@ export function BoardContextProvider({ children }: BoardProviderProps) {
   const [columnsInfos, setColumnsInfos] = useState<Column[]>([]);
   const [columnsOrder, setColumnsOrder] = useState<string[]>([]);
 
+  console.log(columnsInfos);
+
   useEffect(() => {
     setColumnsInfos([
-      { id: 'cba', title: 'Sprint BackLog', tasksIds: [] },
-      { id: 'ab', title: 'Development', tasksIds: [] },
+      { id: 'sprint-backlog', title: 'Sprint BackLog', tasksIds: [] },
+      { id: 'development', title: 'Development', tasksIds: [] },
     ]);
 
-    setColumnsOrder(['cba', 'ab']);
+    setColumnsOrder(['sprint-backlog', 'development']);
   }, []);
 
   return (

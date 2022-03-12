@@ -5,7 +5,7 @@
 import { useContext, useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { BoardContext } from '../../contexts/BoardContext';
-import { Container, Tag } from './styles';
+import { Container, Tag, Content } from './styles';
 
 interface TaskProps {
   id: string;
@@ -15,6 +15,7 @@ interface TaskProps {
 }
 
 export function Task({ id, content, label, index }: TaskProps) {
+  console.log('TASK INDEX', id, index);
   const [isToEdit, setIsToEdit] = useState(false);
   const [newContent, setNewContent] = useState(content);
   const { setAllTasks } = useContext(BoardContext);
@@ -80,7 +81,12 @@ export function Task({ id, content, label, index }: TaskProps) {
               />
             </form>
           ) : (
-            <p onClick={() => setIsToEdit(true)}>{content}</p>
+            <Content
+              onClick={() => setIsToEdit(true)}
+              isLarge={content.length > 20}
+            >
+              {content}
+            </Content>
           )}
         </Container>
       )}

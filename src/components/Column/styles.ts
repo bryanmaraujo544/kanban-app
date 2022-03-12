@@ -50,6 +50,7 @@ export const TasksContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 12.5rem;
+  flex: 1;
   overflow-y: scroll;
   padding: 0 0.8rem;
 

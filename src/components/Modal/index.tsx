@@ -15,7 +15,6 @@ interface Props {
 }
 
 export const Modal = ({ children, isOpen, setIsOpen, modalTitle }: Props) => {
-  console.log({ setIsOpen });
   const overlayControls = useAnimation();
 
   useEffect(() => {
