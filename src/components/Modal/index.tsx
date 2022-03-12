@@ -8,7 +8,7 @@ import { overlayVariants } from '../../variants/Modal/overlayVariants';
 import { modalVariants } from '../../variants/Modal/modalVariants';
 
 interface Props {
-  children: ReactNode;
+  children?: ReactNode;
   isOpen: boolean;
   setIsOpen: any;
   modalTitle: string;

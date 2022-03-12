@@ -1,14 +1,14 @@
 // import { ToastContainer } from 'react-toastify';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { StyledToastContainer } from '../StyledToastContainer';
 import 'react-toastify/dist/ReactToastify.css';
-
-import { BoardContextProvider } from '../../contexts/BoardContext';
-import { Board } from '../Board';
-import { Container } from './styles';
+import { Home } from '../../pages/Home';
+import { Register } from '../../pages/Register';
+import { Login } from '../../pages/Login';
 
 function App() {
   return (
-    <BoardContextProvider>
+    <>
       <StyledToastContainer
         autoClose={2000}
         pauseOnHover={false}
@@ -16,10 +16,14 @@ function App() {
         closeOnClick={false}
         position="top-center"
       />
-      <Container>
-        <Board />
-      </Container>
-    </BoardContextProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 

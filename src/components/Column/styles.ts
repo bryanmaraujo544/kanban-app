@@ -16,6 +16,7 @@ export const Container = styled.div`
   border-radius: 0.4rem;
   max-height: 100%;
   margin: 0 0.8rem;
+  box-shadow: 0 0.2rem 0.4rem #00000005;
 
   .header {
     display: flex;
@@ -25,6 +26,7 @@ export const Container = styled.div`
 
     h3 {
       color: #495057;
+      cursor: text;
     }
 
     .edit-form {

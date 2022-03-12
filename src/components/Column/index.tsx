@@ -78,7 +78,6 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
 
   function handleUpdateColumnTitle(e: any) {
     e.preventDefault();
-    setIsToEditColumnTitle(false);
     setColumnsInfos((prevColumns: any) =>
       prevColumns.map((column: any) => {
         if (column.id === id) {
@@ -87,6 +86,7 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
         return column;
       })
     );
+    setIsToEditColumnTitle(false);
   }
 
   return (

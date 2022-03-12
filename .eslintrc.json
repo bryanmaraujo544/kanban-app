@@ -23,7 +23,19 @@
     "jsx-a11y/control-has-associated-label": "off",
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/no-noninteractive-element-interactions": "off",
-    "no-useless-return": "off"
+    "no-useless-return": "off",
+
+    "react/function-component-definition": [
+      1,
+      {
+        "namedComponents": [
+          "function-declaration",
+          "function-expression",
+          "arrow-function"
+        ],
+        "unnamedComponents": "function-expression"
+      }
+    ]
   },
   "settings": {
     "import/resolver": {

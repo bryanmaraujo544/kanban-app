@@ -3,6 +3,7 @@
 import { useContext, useState } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { toast } from 'react-toastify';
 
 import { BoardContext } from '../../contexts/BoardContext';
 import { Column } from '../Column';
@@ -75,6 +76,10 @@ export function Board() {
 
   function handleCreateColumn(e: any) {
     e.preventDefault();
+    if (!newColumnTitle) {
+      toast.error('Type the column title', { autoClose: 1000 });
+      return;
+    }
     const newColumn = {
       id: newColumnTitle.replace(' ', ''),
       title: newColumnTitle,
