@@ -15,6 +15,7 @@ export const Container = styled.div`
   background: #fff;
   border-radius: 0.4rem;
   max-height: 100%;
+  margin: 0 0.8rem;
 
   .header {
     display: flex;
@@ -80,7 +81,7 @@ export const Container = styled.div`
 export const TasksContainer = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 3.2rem;
+  min-height: 0.8rem;
   flex: 1;
   overflow-y: scroll;
   padding: 0 0.8rem;
@@ -92,13 +93,17 @@ export const TasksContainer = styled.div`
   ::-webkit-scrollbar-track {
     background-color: transparent;
   }
+
   ::-webkit-scrollbar-thumb {
     background: #adb5bd;
-    box-shadow: 0 0.2rem 0.8rem #00000030;
     border-radius: 0.4rem;
 
     &:hover {
-      background: #00a8e8;
+      background: #6c757d;
+    }
+
+    &:active {
+      background: #495057;
     }
   }
 `;

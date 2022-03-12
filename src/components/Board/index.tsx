@@ -1,12 +1,17 @@
 /* eslint-disable react/jsx-no-bind */
 /* eslint-disable react/jsx-props-no-spreading */
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { AiOutlinePlus } from 'react-icons/ai';
+
 import { BoardContext } from '../../contexts/BoardContext';
 import { Column } from '../Column';
-import { Container } from './styles';
+import { Container, AddColumn } from './styles';
 
 export function Board() {
+  const [isToEditColumn, setIsToEditColumn] = useState(false);
+  const [newColumnTitle, setNewColumnTitle] = useState('');
+
   const { columnsInfos, columnsOrder, setColumnsOrder, setColumnsInfos } =
     useContext(BoardContext);
 
@@ -22,7 +27,6 @@ export function Board() {
       return;
     }
 
-    console.log({ destination, source, draggableId, type });
     if (type === 'column') {
       const newOrder = columnsOrder;
       newOrder.splice(source.index, 1);
@@ -69,6 +73,21 @@ export function Board() {
     }
   }
 
+  function handleCreateColumn(e: any) {
+    e.preventDefault();
+    const newColumn = {
+      id: newColumnTitle.replace(' ', ''),
+      title: newColumnTitle,
+      tasksIds: [],
+    };
+    setColumnsInfos((prevColumns: any) => [...prevColumns, newColumn]);
+    setColumnsOrder((prevOrder: string[]) => [
+      ...prevOrder,
+      newColumnTitle.replace(' ', ''),
+    ]);
+    setIsToEditColumn(false);
+  }
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="board" direction="horizontal" type="column">
@@ -89,6 +108,41 @@ export function Board() {
               );
             })}
             {provided.placeholder}
+            <AddColumn>
+              {isToEditColumn ? (
+                <form
+                  className="create-column-form"
+                  onSubmit={handleCreateColumn}
+                >
+                  <input
+                    type="text"
+                    placeholder="Type the column title"
+                    value={newColumnTitle}
+                    onChange={(e) => setNewColumnTitle(e.target.value)}
+                    autoFocus
+                  />
+                  <footer>
+                    <button type="submit">Create Column</button>
+                    <button
+                      type="button"
+                      className="cancel-btn"
+                      onClick={() => setIsToEditColumn(false)}
+                    >
+                      Cancel
+                    </button>
+                  </footer>
+                </form>
+              ) : (
+                <button
+                  type="button"
+                  className="add-column-suggest-btn"
+                  onClick={() => setIsToEditColumn(true)}
+                >
+                  <AiOutlinePlus className="icon" />
+                  <p>Add a new column</p>
+                </button>
+              )}
+            </AddColumn>
           </Container>
         )}
       </Droppable>

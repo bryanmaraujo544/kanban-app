@@ -118,7 +118,27 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
                 onClick={() => setIsModalOpen(true)}
               />
             </header>
-            {tasks.length === 0 ? (
+
+            <Droppable droppableId={id} type="task">
+              {(provided) => (
+                <TasksContainer
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {tasks.map(({ id: taskId, content, label }: any, index) => (
+                    <Task
+                      key={taskId}
+                      id={taskId}
+                      content={content}
+                      label={label}
+                      index={index}
+                    />
+                  ))}
+                  {provided.placeholder}
+                </TasksContainer>
+              )}
+            </Droppable>
+            {tasks.length === 0 && (
               <button
                 type="button"
                 className="add-card-btn"
@@ -127,26 +147,6 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
                 <AiOutlinePlus className="add-icon" />
                 <p>Add card</p>
               </button>
-            ) : (
-              <Droppable droppableId={id} type="task">
-                {(provided) => (
-                  <TasksContainer
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                  >
-                    {tasks.map(({ id: taskId, content, label }: any, index) => (
-                      <Task
-                        key={taskId}
-                        id={taskId}
-                        content={content}
-                        label={label}
-                        index={index}
-                      />
-                    ))}
-                    {provided.placeholder}
-                  </TasksContainer>
-                )}
-              </Droppable>
             )}
           </Container>
         )}

@@ -16,7 +16,7 @@ interface ContentProps {
 export const Container = styled.div<Props>`
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.8rem;
   padding: 1.2rem;
   background: #f0ecfe;
   font-size: 1.6rem;
@@ -26,18 +26,17 @@ export const Container = styled.div<Props>`
   width: 100%;
 
   .edit-form {
-    margin-top: 0.8rem;
-
     input {
-      font-size: 1.8rem;
-      font-weight: 500;
+      font-size: 1.4rem;
       color: #495057;
-      padding: 0.6rem;
-      background: #fff;
+      /* padding: 0.6rem; */
+      background: #f8f9fa;
+      padding: 0.4rem;
       border: none;
       border-radius: 0.4rem;
       outline: none;
       box-shadow: 0 0.1rem 0.3rem #00000002;
+      width: 100%;
     }
   }
 `;
@@ -47,6 +46,7 @@ export const Content = styled.p<ContentProps>`
   font-weight: 400;
   color: #495057;
   word-break: break-word;
+  cursor: text;
 `;
 
 export const Tag = styled.div<TagProps>`
