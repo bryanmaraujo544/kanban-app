@@ -7,16 +7,53 @@ import { Column } from '../Column';
 import { Container } from './styles';
 
 export function Board() {
-  const { columnsInfos, columnsOrder, setColumnsOrder } =
+  const { columnsInfos, columnsOrder, setColumnsOrder, setColumnsInfos } =
     useContext(BoardContext);
 
   function onDragEnd({ source, destination, type, draggableId }: any) {
+    if (
+      destination.droppableId === source.droppableId &&
+      source.index === destination.index
+    ) {
+      return;
+    }
+
+    if (!destination) {
+      return;
+    }
+
     console.log({ destination, source, draggableId, type });
-    if (destination.droppableId === 'board') {
+    if (type === 'column') {
       const newOrder = columnsOrder;
       newOrder.splice(source.index, 1);
       newOrder.splice(destination.index, 0, draggableId);
       setColumnsOrder(newOrder);
+    }
+
+    if (type === 'task') {
+      if (source.droppableId === destination.droppableId) {
+        // The card it was moved from one column to the same column
+      } else {
+        // Card it was moved from one column to the other column
+        setColumnsInfos((prevColumnInfos: any) =>
+          prevColumnInfos.map((column: any) => {
+            if (column.id === source.droppableId) {
+              // remove the task from its old column
+              const newTasksIds = [...column.tasksIds];
+              newTasksIds.splice(source.index, 1);
+              return { ...column, tasksIds: newTasksIds };
+            }
+
+            if (column.id === destination.droppableId) {
+              const newTasksIds = [...column.tasksIds];
+              newTasksIds.splice(destination.index, 0, draggableId);
+              return { ...column, tasksIds: newTasksIds };
+            }
+
+            return column;
+          })
+        );
+      }
     }
   }
 
@@ -39,15 +76,6 @@ export function Board() {
                 />
               );
             })}
-            {/* {columnsInfos.map(({ id, tasksIds, title }, index) => (
-              <Column
-                key={id}
-                id={id}
-                title={title}
-                tasksIds={tasksIds}
-                index={index}
-              />
-            ))} */}
             {provided.placeholder}
           </Container>
         )}

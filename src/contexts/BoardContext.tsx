@@ -34,32 +34,9 @@ export function BoardContextProvider({ children }: BoardProviderProps) {
   const [columnsOrder, setColumnsOrder] = useState<string[]>([]);
 
   useEffect(() => {
-    setAllTasks([
-      {
-        id: 'abc',
-        content: 'criar',
-        label: 'green',
-      },
-      {
-        id: 'acb',
-        content: 'criar',
-        label: 'green',
-      },
-      {
-        id: 'abcd',
-        content: 'criar',
-        label: 'green',
-      },
-      {
-        id: 'abcde',
-        content: 'criar',
-        label: 'green',
-      },
-    ]);
-
     setColumnsInfos([
-      { id: 'cba', title: 'Sprint BackLog', tasksIds: ['abc', 'acb'] },
-      { id: 'ab', title: 'Development', tasksIds: ['abcd', 'abcde'] },
+      { id: 'cba', title: 'Sprint BackLog', tasksIds: [] },
+      { id: 'ab', title: 'Development', tasksIds: [] },
     ]);
 
     setColumnsOrder(['cba', 'ab']);

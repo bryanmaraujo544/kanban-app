@@ -10,14 +10,17 @@ export const Container = styled.div`
   gap: 1.6rem;
   /* flex: 1; */
   min-width: 30rem;
-  padding: 2.4rem;
+  max-width: 30rem;
+  padding: 2.4rem 2rem;
   background: #fff;
   border-radius: 0.4rem;
+  max-height: 100%;
 
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 0.8rem;
 
     .edit-form {
       input {
@@ -46,7 +49,26 @@ export const Container = styled.div`
 export const TasksContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  min-height: 12.5rem;
+  overflow-y: scroll;
+  padding: 0 0.8rem;
+
+  ::-webkit-scrollbar {
+    width: 1rem;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #adb5bd;
+    box-shadow: 0 0.2rem 0.8rem #00000030;
+    border-radius: 0.4rem;
+
+    &:hover {
+      background: #00a8e8;
+    }
+  }
 `;
 
 export const TextArea = styled.textarea`

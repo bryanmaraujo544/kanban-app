@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { useContext, useEffect, useState } from 'react';
-import { Draggable } from 'react-beautiful-dnd';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BsCheck } from 'react-icons/bs';
 
@@ -110,11 +110,24 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
                 onClick={() => setIsModalOpen(true)}
               />
             </header>
-            <TasksContainer>
-              {tasks.map(({ id: taskId, content, label }: any) => (
-                <Task id={taskId} content={content} label={label} />
-              ))}
-            </TasksContainer>
+            <Droppable droppableId={id} type="task">
+              {(provided) => (
+                <TasksContainer
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {tasks.map(({ id: taskId, content, label }: any, index) => (
+                    <Task
+                      id={taskId}
+                      content={content}
+                      label={label}
+                      index={index}
+                    />
+                  ))}
+                  {provided.placeholder}
+                </TasksContainer>
+              )}
+            </Droppable>
           </Container>
         )}
       </Draggable>

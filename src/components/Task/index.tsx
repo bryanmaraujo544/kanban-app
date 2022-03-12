@@ -1,7 +1,9 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/no-autofocus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import { useContext, useState } from 'react';
+import { Draggable } from 'react-beautiful-dnd';
 import { BoardContext } from '../../contexts/BoardContext';
 import { Container, Tag } from './styles';
 
@@ -9,9 +11,10 @@ interface TaskProps {
   id: string;
   content: string;
   label: string;
+  index: number;
 }
 
-export function Task({ id, content, label }: TaskProps) {
+export function Task({ id, content, label, index }: TaskProps) {
   const [isToEdit, setIsToEdit] = useState(false);
   const [newContent, setNewContent] = useState(content);
   const { setAllTasks } = useContext(BoardContext);
@@ -52,22 +55,35 @@ export function Task({ id, content, label }: TaskProps) {
   }
 
   return (
-    <Container label={label}>
-      <Tag className="tag" label={label} onClick={() => handleChangeTag()} />
-      {isToEdit ? (
-        <form
-          onSubmit={(e) => handleUpdateTaskContent(e)}
-          className="edit-form"
+    <Draggable draggableId={id} index={index}>
+      {(provided) => (
+        <Container
+          label={label}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
         >
-          <input
-            value={newContent}
-            onChange={(e) => setNewContent(e.target.value)}
-            autoFocus
+          <Tag
+            className="tag"
+            label={label}
+            onClick={() => handleChangeTag()}
           />
-        </form>
-      ) : (
-        <p onClick={() => setIsToEdit(true)}>{content}</p>
+          {isToEdit ? (
+            <form
+              onSubmit={(e) => handleUpdateTaskContent(e)}
+              className="edit-form"
+            >
+              <input
+                value={newContent}
+                onChange={(e) => setNewContent(e.target.value)}
+                autoFocus
+              />
+            </form>
+          ) : (
+            <p onClick={() => setIsToEdit(true)}>{content}</p>
+          )}
+        </Container>
       )}
-    </Container>
+    </Draggable>
   );
 }

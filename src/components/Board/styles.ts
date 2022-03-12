@@ -7,4 +7,5 @@ export const Container = styled.main`
   flex: 1;
   padding: 3.2rem;
   overflow-x: scroll;
+  overflow: hidden;
 `;
