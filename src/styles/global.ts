@@ -20,6 +20,12 @@ const global = createGlobalStyle`
     cursor: pointer;
   }
 
+  input {
+    &:focus {
+      outline: .2rem solid #6C757D;
+    }
+  }
+
   :root {
     --toastify-color-error: #ef233c !important;
     --toastify-color-warning: #f9a620;
