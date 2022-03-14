@@ -24,6 +24,7 @@ export const Container = styled.div<Props>`
   margin: 0.8rem 0;
   max-width: 100%;
   width: 100%;
+  cursor: default !important;
 
   .edit-form {
     input {
@@ -47,6 +48,7 @@ export const Content = styled.p<ContentProps>`
   color: #495057;
   word-break: break-word;
   cursor: text;
+  width: fit-content;
 `;
 
 export const Tag = styled.div<TagProps>`

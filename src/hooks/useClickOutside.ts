@@ -6,7 +6,6 @@ export const useClickOutside = (onClick: () => any) => {
   useEffect(() => {
     const handler = (event: any) => {
       if (!areaRef?.current?.contains(event.target)) {
-        console.log('Clicked Outside!');
         onClick();
       }
     };

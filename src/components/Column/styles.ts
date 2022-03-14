@@ -119,6 +119,10 @@ export const TextArea = styled.textarea`
   border: 0.1rem solid #adb5bd;
   border-radius: 0.4rem;
   min-height: 7.2rem;
+
+  &:focus {
+    outline: 0.2rem solid #495057;
+  }
 `;
 
 export const ModalForm = styled.form`

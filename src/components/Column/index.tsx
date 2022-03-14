@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-alert */
 /* eslint-disable react/jsx-props-no-spreading */
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BsCheck } from 'react-icons/bs';
@@ -35,6 +35,7 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
   const [newCardTag, setNewCardTag] = useState('green');
 
   const { allTasks, setAllTasks, setColumnsInfos } = useContext(BoardContext);
+  const modalTextAreaRef = useRef<any>();
 
   const tasks = tasksIds.map(
     (taskId) => allTasks.filter((task) => task.id === taskId)[0]
@@ -43,6 +44,8 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
   useEffect(() => {
     if (!isModalOpen) {
       setNewCardTitle('');
+
+      return;
     }
   }, [isModalOpen]);
 
@@ -117,6 +120,7 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
                 <form
                   className="edit-form"
                   onSubmit={(e) => handleUpdateColumnTitle(e)}
+                  ref={columnTitleRef}
                 >
                   <input
                     value={newColumnTitle}
@@ -125,12 +129,7 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
                   />
                 </form>
               ) : (
-                <h3
-                  onClick={() => setIsToEditColumnTitle(true)}
-                  ref={columnTitleRef}
-                >
-                  {title}
-                </h3>
+                <h3 onClick={() => setIsToEditColumnTitle(true)}>{title}</h3>
               )}
               <AiOutlinePlus
                 className="add-icon"
@@ -180,6 +179,7 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
             placeholder="Enter the card title"
             value={newCardTitle}
             onChange={(e) => setNewCardTitle(e.target.value)}
+            ref={modalTextAreaRef}
           />
           <div className="tags">
             {cardsTags.map(({ name, color }) => (

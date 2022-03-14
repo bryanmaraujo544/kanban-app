@@ -5,6 +5,7 @@
 import { useContext, useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { BoardContext } from '../../contexts/BoardContext';
+import { useClickOutside } from '../../hooks/useClickOutside';
 import { Container, Tag, Content } from './styles';
 
 interface TaskProps {
@@ -19,7 +20,17 @@ export function Task({ id, content, label, index }: TaskProps) {
   const [newContent, setNewContent] = useState(content);
   const { setAllTasks } = useContext(BoardContext);
 
-  function updateTask() {
+  function handleUpdateTaskContent(e?: any) {
+    if (!isToEdit) {
+      return;
+    }
+    if (!newContent) {
+      setNewContent(content);
+      setIsToEdit(false);
+      return;
+    }
+
+    e?.preventDefault();
     setAllTasks((prevTasks: any) =>
       prevTasks.map((task: any) => {
         if (task.id === id) {
@@ -28,11 +39,6 @@ export function Task({ id, content, label, index }: TaskProps) {
         return task;
       })
     );
-  }
-
-  function handleUpdateTaskContent(e: any) {
-    e.preventDefault();
-    updateTask();
     setIsToEdit(false);
   }
 
@@ -54,6 +60,8 @@ export function Task({ id, content, label, index }: TaskProps) {
     );
   }
 
+  const contentRef = useClickOutside(handleUpdateTaskContent);
+
   return (
     <Draggable draggableId={id} index={index}>
       {(provided) => (
@@ -71,6 +79,7 @@ export function Task({ id, content, label, index }: TaskProps) {
           {isToEdit ? (
             <form
               onSubmit={(e) => handleUpdateTaskContent(e)}
+              ref={contentRef}
               className="edit-form"
             >
               <input
