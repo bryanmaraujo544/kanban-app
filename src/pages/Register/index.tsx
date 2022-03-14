@@ -1,6 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import api from '../../services/utils/ApiClient';
 import { Container, FormContainer, InputGroup } from './styles';
 
 interface Inputs {
@@ -11,10 +14,35 @@ interface Inputs {
 }
 
 export const Register = () => {
-  const { register, handleSubmit } = useForm<Inputs>();
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
+  const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async ({
+    name,
+    photoUrl,
+    email,
+    password,
+  }) => {
+    setIsLoading(true);
+    const noPhotoUrl = 'https://i.stack.imgur.com/l60Hf.png';
+    const { data } = await api.post('/auth/register', {
+      name,
+      profileImageUrl: photoUrl || noPhotoUrl,
+      email,
+      password,
+    });
+    setIsLoading(false);
+
+    if (!data.user) {
+      toast.error(data.message);
+      return;
+    }
+    navigate('/login');
   };
 
   return (
@@ -28,7 +56,12 @@ export const Register = () => {
         </header>
         <form onSubmit={handleSubmit(onSubmit)}>
           <InputGroup>
-            <input type="text" placeholder="Name..." {...register('name')} />
+            <input
+              type="text"
+              placeholder="Name... *"
+              {...register('name', { required: true, maxLength: 128 })}
+            />
+            {errors.name && <span>This field is required</span>}
           </InputGroup>
           <InputGroup>
             <input
@@ -38,16 +71,24 @@ export const Register = () => {
             />
           </InputGroup>
           <InputGroup>
-            <input type="text" placeholder="Email..." {...register('email')} />
+            <input
+              type="email"
+              placeholder="Email... *"
+              {...register('email', { required: true })}
+            />
+            {errors.email && <span>This field is required</span>}
           </InputGroup>
           <InputGroup>
             <input
-              type="text"
-              placeholder="Password..."
-              {...register('password')}
+              type="password"
+              placeholder="Password... *"
+              {...register('password', { required: true })}
             />
+            {errors.password && <span>This field is required</span>}
           </InputGroup>
-          <button type="submit">Register</button>
+          <button type="submit" disabled={isLoading}>
+            Register
+          </button>
         </form>
       </FormContainer>
     </Container>

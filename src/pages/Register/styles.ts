@@ -77,4 +77,10 @@ export const InputGroup = styled.div`
     font-size: 1.4rem;
     font-weight: 500;
   }
+
+  span {
+    color: #ef233c;
+    margin-top: 0.4rem;
+    font-size: 1.2rem;
+  }
 `;
