@@ -17,6 +17,7 @@ export const Container = styled.div`
   max-height: 100%;
   margin: 0 0.8rem;
   box-shadow: 0 0.2rem 0.4rem #00000005;
+  cursor: default !important;
 
   .header {
     display: flex;

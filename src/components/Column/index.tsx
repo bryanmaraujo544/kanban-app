@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-alert */
 /* eslint-disable react/jsx-props-no-spreading */
 import { useContext, useEffect, useState } from 'react';
@@ -7,6 +8,7 @@ import { BsCheck } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 
 import { BoardContext } from '../../contexts/BoardContext';
+import { useClickOutside } from '../../hooks/useClickOutside';
 import { Modal } from '../Modal';
 import { Task } from '../Task';
 import { Container, TasksContainer, TextArea, ModalForm, Tag } from './styles';
@@ -76,8 +78,19 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
     setIsModalOpen(false);
   }
 
-  function handleUpdateColumnTitle(e: any) {
-    e.preventDefault();
+  function handleUpdateColumnTitle(e?: any) {
+    if (!isToEditColumnTitle) {
+      return;
+    }
+
+    if (!newColumnTitle) {
+      setNewColumnTitle(title);
+      setIsToEditColumnTitle(false);
+      return;
+    }
+
+    e?.preventDefault();
+    setIsToEditColumnTitle(false);
     setColumnsInfos((prevColumns: any) =>
       prevColumns.map((column: any) => {
         if (column.id === id) {
@@ -86,8 +99,9 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
         return column;
       })
     );
-    setIsToEditColumnTitle(false);
   }
+
+  const columnTitleRef = useClickOutside(() => handleUpdateColumnTitle());
 
   return (
     <>
@@ -111,7 +125,12 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
                   />
                 </form>
               ) : (
-                <h3 onClick={() => setIsToEditColumnTitle(true)}>{title}</h3>
+                <h3
+                  onClick={() => setIsToEditColumnTitle(true)}
+                  ref={columnTitleRef}
+                >
+                  {title}
+                </h3>
               )}
               <AiOutlinePlus
                 className="add-icon"
@@ -138,16 +157,15 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
                 </TasksContainer>
               )}
             </Droppable>
-            {tasks.length === 0 && (
-              <button
-                type="button"
-                className="add-card-btn"
-                onClick={() => setIsModalOpen(true)}
-              >
-                <AiOutlinePlus className="add-icon" />
-                <p>Add card</p>
-              </button>
-            )}
+
+            <button
+              type="button"
+              className="add-card-btn"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <AiOutlinePlus className="add-icon" />
+              <p>Add card</p>
+            </button>
           </Container>
         )}
       </Draggable>

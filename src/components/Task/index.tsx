@@ -15,7 +15,6 @@ interface TaskProps {
 }
 
 export function Task({ id, content, label, index }: TaskProps) {
-  console.log('TASK INDEX', id, index);
   const [isToEdit, setIsToEdit] = useState(false);
   const [newContent, setNewContent] = useState(content);
   const { setAllTasks } = useContext(BoardContext);
