@@ -10,10 +10,26 @@ const global = createGlobalStyle`
 
   html {
     font-size: 62.5%;
-  }
 
-  body {
-    font-size: 1.6rem;
+    @media (max-width: 1900px) {
+      font-size: 14px;
+    }
+
+    @media (max-width: 1280px) {
+      font-size: 12px;
+    }
+
+    @media (max-width: 980px) {
+      font-size: 10px;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 9px;
+    }
+
+    @media (max-width: 468px) {
+      font-size: 8px;
+    }
   }
 
   button {

@@ -28,30 +28,22 @@ export const Register = () => {
         </header>
         <form onSubmit={handleSubmit(onSubmit)}>
           <InputGroup>
-            <input
-              type="text"
-              placeholder="Type your name"
-              {...register('name')}
-            />
+            <input type="text" placeholder="Name..." {...register('name')} />
           </InputGroup>
           <InputGroup>
             <input
               type="text"
-              placeholder="Enter Photo Image Url..."
+              placeholder="Profile Image Url..."
               {...register('photoUrl')}
             />
           </InputGroup>
           <InputGroup>
-            <input
-              type="text"
-              placeholder="Enter an email..."
-              {...register('email')}
-            />
+            <input type="text" placeholder="Email..." {...register('email')} />
           </InputGroup>
           <InputGroup>
             <input
               type="text"
-              placeholder="Enter a password"
+              placeholder="Password..."
               {...register('password')}
             />
           </InputGroup>

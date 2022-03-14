@@ -28,6 +28,7 @@ export const Container = styled.div`
     h3 {
       color: #495057;
       cursor: text;
+      font-size: 1.8rem;
     }
 
     .edit-form {
