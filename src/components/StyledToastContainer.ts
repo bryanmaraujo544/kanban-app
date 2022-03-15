@@ -20,7 +20,7 @@ export const StyledToastContainer = styled(ToastContainer).attrs({
   .toast {
     background-color: #fff;
     border-radius: 4px;
-    height: 4.2rem;
+    min-height: 4.2rem;
     padding: 0.8rem;
     box-shadow: 0 0.1rem 0.3rem #00000005;
   }

@@ -1,6 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import { setCookie } from 'nookies';
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import api from '../../services/utils/ApiClient';
 import { Container, FormContainer, InputGroup } from './styles';
 
 interface Inputs {
@@ -9,10 +13,31 @@ interface Inputs {
 }
 
 export const Login = () => {
-  const { register, handleSubmit } = useForm<Inputs>();
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
+  const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async ({ email, password }) => {
+    try {
+      setIsLoading(true);
+      const { data } = await api.post('/auth/login', { email, password });
+      setIsLoading(false);
+
+      if (!data.token) {
+        toast.error(data.message);
+        return;
+      }
+
+      setCookie(null, 'token', data.token);
+      navigate('/');
+    } catch (err: any) {
+      setIsLoading(false);
+      toast.error(err.response.data.message);
+    }
   };
   return (
     <Container>
@@ -27,19 +52,23 @@ export const Login = () => {
           <InputGroup>
             <input
               type="text"
-              placeholder="type your name"
-              {...register('email')}
+              placeholder="Email..."
+              {...register('email', { required: true })}
             />
+            {errors.email && <span>Field required</span>}
           </InputGroup>
           <InputGroup>
             <input
               type="text"
-              placeholder="type your name"
-              {...register('password')}
+              placeholder="Passoword..."
+              {...register('password', { required: true })}
             />
+            {errors.password && <span>Field required</span>}
           </InputGroup>
 
-          <button type="submit">Login</button>
+          <button type="submit" disabled={isLoading}>
+            Login
+          </button>
         </form>
       </FormContainer>
     </Container>
