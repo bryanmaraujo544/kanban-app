@@ -59,7 +59,7 @@ export const Login = () => {
           </InputGroup>
           <InputGroup>
             <input
-              type="text"
+              type="password"
               placeholder="Passoword..."
               {...register('password', { required: true })}
             />
