@@ -1,9 +1,10 @@
+/* eslint-disable react/no-unused-prop-types */
 import { useState, useEffect } from 'react';
 import { GrFormClose } from 'react-icons/gr';
 import { motion } from 'framer-motion';
 import { AiOutlinePlus } from 'react-icons/ai';
 
-import { Container } from './styles';
+import { Container, MembersFound, MemberFound } from './styles';
 import { Modal } from '../Modal';
 import api from '../../services/utils/ApiClient';
 
@@ -13,32 +14,48 @@ interface Props {
   setMembersInvited: any;
 }
 
+interface User {
+  id: number;
+  name: string;
+  photo_url: string;
+  email: string;
+}
+
 export const InviteMembers = ({
   isModalOpen,
   setIsModalOpen,
   setMembersInvited,
 }: Props) => {
-  const [isLoading, setIsLoading] = useState(false);
-
+  const [allUsers, setAllUsers] = useState([]);
+  const [, setIsLoading] = useState(false);
   const [memberEmail, setMemberEmail] = useState('');
   const [membersSelectedToInvite, setMembersSelectedToInvite] = useState(
     [] as any
   );
   const [membersFound, setMembersFound] = useState([] as any);
 
-  console.log({ isLoading });
+  useEffect(() => {
+    (async () => {
+      const {
+        data: { users },
+      } = await api.get('users');
+      setAllUsers(users);
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      // const members = allUsers.filter((user) => user.email.includes(memberEmail));
-      const { data } = await api.get(`/users/${memberEmail}`);
-      setMembersFound(data.users);
+      const members = allUsers.filter((user: User) =>
+        user.email.includes(memberEmail)
+      );
+
+      setMembersFound(members);
       setIsLoading(false);
     })();
   }, [memberEmail]);
 
-  function handleAddMemberToSelectedList(user: any) {
+  function handleAddMemberToSelectedList(user: User) {
     const alreadySelected = membersSelectedToInvite.some(
       (member: any) => member.email === user.email
     );
@@ -75,15 +92,17 @@ export const InviteMembers = ({
     >
       <Container className="search-container">
         <div className="members-selected">
-          {membersSelectedToInvite?.map(({ name, email }: any) => (
-            <div className="member-selected">
-              {name}
-              <GrFormClose
-                className="icon"
-                onClick={() => handleRemoveMemberFromSelectedList(email)}
-              />
-            </div>
-          ))}
+          {membersSelectedToInvite?.map(
+            ({ name, email }: { name: string; email: string }) => (
+              <div className="member-selected">
+                {name}
+                <GrFormClose
+                  className="icon"
+                  onClick={() => handleRemoveMemberFromSelectedList(email)}
+                />
+              </div>
+            )
+          )}
           <button
             type="button"
             className="invite-btn"
@@ -98,12 +117,13 @@ export const InviteMembers = ({
           value={memberEmail}
           onChange={(e) => setMemberEmail(e.target.value)}
         />
-        <motion.div
+        <MembersFound
+          as={motion.div}
           className="members-found"
           animate={{ display: memberEmail.length > 0 ? 'flex' : 'none' }}
         >
-          {membersFound?.map((user: any) => (
-            <div className="member">
+          {membersFound?.map((user: User) => (
+            <MemberFound isSelected>
               <div className="infos">
                 <img src={user.photo_url} alt="member" />
                 <div className="name-email">
@@ -115,9 +135,9 @@ export const InviteMembers = ({
                 className="icon"
                 onClick={() => handleAddMemberToSelectedList(user)}
               />
-            </div>
+            </MemberFound>
           ))}
-        </motion.div>
+        </MembersFound>
       </Container>
     </Modal>
   );

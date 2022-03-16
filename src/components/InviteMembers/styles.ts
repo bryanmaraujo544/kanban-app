@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+interface MemberFoundProps {
+  isSelected: boolean;
+}
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -45,56 +49,61 @@ export const Container = styled.div`
     font-weight: 500;
     color: #495057;
   }
+`;
 
-  .members-found {
-    background: #e9ecef;
-    padding: 0.8rem;
-    border-radius: 0.4rem;
+export const MembersFound = styled.div`
+  background: #e9ecef;
+  padding: 0.8rem;
+  border-radius: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  min-height: 15rem;
+  max-height: 15rem;
+  overflow-y: scroll;
+`;
+
+export const MemberFound = styled.div<MemberFoundProps>`
+  background: ${({ isSelected }) => (isSelected ? '#CED4DA' : '#fff')};
+  border-radius: 0.4rem;
+  padding: 1.2rem;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .infos {
     display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: 1.2rem;
-    min-height: 15rem;
-    max-height: 15rem;
-    overflow-y: scroll;
 
-    .member {
-      background: #fff;
-      border-radius: 0.4rem;
-      padding: 1.2rem;
-      position: relative;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    img {
+      width: 3.2rem;
+      height: 3.2rem;
+      border-radius: 50%;
+      object-fit: cover;
+    }
 
-      .infos {
-        display: flex;
-        align-items: center;
-        gap: 1.2rem;
+    .name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #495057;
+    }
 
-        img {
-          width: 3.2rem;
-          height: 3.2rem;
-          border-radius: 50%;
-          object-fit: cover;
-        }
+    .email {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #6c757d;
+    }
+  }
 
-        .name {
-          font-size: 1.4rem;
-          font-weight: 700;
-          color: #495057;
-        }
+  .icon {
+    font-size: 2rem;
+    color: #6c757d;
+    cursor: pointer;
 
-        .email {
-          font-size: 1.2rem;
-          font-weight: 500;
-          color: #6c757d;
-        }
-      }
-
-      .icon {
-        font-size: 2rem;
-        color: #6c757d;
-      }
+    &:hover {
+      color: #495057;
     }
   }
 `;

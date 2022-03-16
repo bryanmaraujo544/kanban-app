@@ -35,6 +35,7 @@ export const AddColumn = styled.div`
   background: #fff;
   border-radius: 0.4rem;
   margin: 0 0.8rem;
+  flex: 1;
 
   .add-column-suggest-btn {
     display: flex;
