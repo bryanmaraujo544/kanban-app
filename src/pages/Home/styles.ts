@@ -145,6 +145,7 @@ export const SearchContainer = styled.div`
           width: 3.2rem;
           height: 3.2rem;
           border-radius: 50%;
+          object-fit: cover;
         }
 
         .name {
