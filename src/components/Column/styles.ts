@@ -9,8 +9,7 @@ export const Container = styled.div`
   flex-direction: column;
   gap: 1.6rem;
   /* flex: 1; */
-  min-width: 30rem;
-  max-width: 30rem;
+  width: 31.5rem;
   padding: 2.4rem 2rem;
   background: #fff;
   border-radius: 0.4rem;

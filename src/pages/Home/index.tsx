@@ -19,15 +19,18 @@ interface User {
 export const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [membersInvited, setMembersInvited] = useState([]);
+  const [user, setUser] = useState({} as User);
 
   const cookies = parseCookies();
   const navigate = useNavigate();
-  const user = jwt_decode(cookies.token) as User;
 
   useEffect(() => {
     if (!cookies.token) {
       navigate('/login');
+      return;
     }
+
+    setUser(jwt_decode(cookies.token));
   }, []);
 
   function handleSearchMember() {

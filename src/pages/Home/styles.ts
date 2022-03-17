@@ -25,21 +25,27 @@ export const Header = styled.header`
     p {
       font-size: 1.6rem;
       font-size: 500;
+      font-weight: 700;
+      color: #212529;
     }
 
     img {
       width: 3.6rem;
       height: 3.6rem;
       object-fit: cover;
-      border-radius: 0.4rem;
+      border-radius: 0.6rem;
     }
   }
 
   .right-actions {
     display: flex;
+    align-items: center;
     gap: 1.6rem;
 
     .members {
+      display: flex;
+      gap: 0.4rem;
+
       img {
         width: 3.2rem;
         height: 3.2rem;
