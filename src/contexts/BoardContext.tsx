@@ -7,15 +7,15 @@ import { parseCookies } from 'nookies';
 import api from '../services/utils/ApiClient';
 
 interface Task {
-  id: string;
+  id: number;
   content: string;
   label: 'red' | 'orange' | 'green';
 }
 
 interface Column {
-  id: string;
+  id: number;
   title: string;
-  tasksIds: string[];
+  tasksIds: number[];
 }
 
 interface ContextProps {
@@ -38,6 +38,8 @@ export function BoardContextProvider({ children }: BoardProviderProps) {
   const [columnsInfos, setColumnsInfos] = useState<Column[]>([]);
   const [columnsOrder, setColumnsOrder] = useState<number[]>([]);
 
+  console.log({ columnsInfos });
+
   const cookies = parseCookies();
 
   useEffect(() => {
@@ -51,10 +53,21 @@ export function BoardContextProvider({ children }: BoardProviderProps) {
         data: { columns },
       } = await api.get(`/columns/${board.id}`);
 
+      const {
+        data: { tasks },
+      } = await api.get(`/tasks/${board.id}`);
+      console.log({ tasks });
+      setAllTasks(tasks);
+
+      const tasksIds = tasks.map((task: any) => task.id);
+      console.log(tasksIds);
+
       const columnsWithTasksIds = columns.map((column: any) => ({
         ...column,
-        tasksIds: [],
+        tasksIds,
       }));
+
+      // const { data: { tasks } } = await
 
       console.log(columnsWithTasksIds);
 

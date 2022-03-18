@@ -15,8 +15,8 @@ import { Container, TasksContainer, TextArea, ModalForm, Tag } from './styles';
 
 interface ColumnProps {
   title: string;
-  id: string;
-  tasksIds: string[];
+  id: number;
+  tasksIds: number[];
   index: number;
 }
 
@@ -40,6 +40,8 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
   const tasks = tasksIds.map(
     (taskId) => allTasks.filter((task) => task.id === taskId)[0]
   );
+
+  console.log('tasks of each column', tasks);
 
   useEffect(() => {
     if (!isModalOpen) {
@@ -108,7 +110,7 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
 
   return (
     <>
-      <Draggable draggableId={id} index={index}>
+      <Draggable draggableId={id.toString()} index={index}>
         {(provided) => (
           <Container
             {...provided.draggableProps}
@@ -137,18 +139,18 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
               />
             </header>
 
-            <Droppable droppableId={id} type="task">
+            <Droppable droppableId={id.toString()} type="task">
               {(provided) => (
                 <TasksContainer
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
-                  {tasks.map(({ id: taskId, content, label }: any, index) => (
+                  {tasks.map(({ id: taskId, title, tag }: any, index) => (
                     <Task
                       key={taskId}
                       id={taskId}
-                      content={content}
-                      label={label}
+                      title={title}
+                      tag={tag}
                       index={index}
                     />
                   ))}

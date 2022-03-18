@@ -10,14 +10,14 @@ import { Container, Tag, Content } from './styles';
 
 interface TaskProps {
   id: string;
-  content: string;
-  label: string;
+  title: string;
+  tag: string;
   index: number;
 }
 
-export function Task({ id, content, label, index }: TaskProps) {
+export function Task({ id, title, tag, index }: TaskProps) {
   const [isToEdit, setIsToEdit] = useState(false);
-  const [newContent, setNewContent] = useState(content);
+  const [newContent, setNewContent] = useState(title);
   const { setAllTasks } = useContext(BoardContext);
 
   function handleUpdateTaskContent(e?: any) {
@@ -25,7 +25,7 @@ export function Task({ id, content, label, index }: TaskProps) {
       return;
     }
     if (!newContent) {
-      setNewContent(content);
+      setNewContent(title);
       setIsToEdit(false);
       return;
     }
@@ -66,16 +66,12 @@ export function Task({ id, content, label, index }: TaskProps) {
     <Draggable draggableId={id} index={index}>
       {(provided) => (
         <Container
-          label={label}
+          label={tag}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
-          <Tag
-            className="tag"
-            label={label}
-            onClick={() => handleChangeTag()}
-          />
+          <Tag className="tag" label={tag} onClick={() => handleChangeTag()} />
           {isToEdit ? (
             <form
               onSubmit={(e) => handleUpdateTaskContent(e)}
@@ -91,9 +87,9 @@ export function Task({ id, content, label, index }: TaskProps) {
           ) : (
             <Content
               onClick={() => setIsToEdit(true)}
-              isLarge={content.length > 20}
+              isLarge={title.length > 20}
             >
-              {content}
+              {title}
             </Content>
           )}
         </Container>
