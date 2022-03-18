@@ -28,6 +28,9 @@ export const BoardsContainer = styled.div`
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
   }
+  @media (max-width: 468px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const Board = styled.div`
