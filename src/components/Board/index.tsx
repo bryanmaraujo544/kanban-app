@@ -23,65 +23,75 @@ export function Board() {
     boardInfos,
   } = useContext(BoardContext);
 
-  console.log({ columnsInfos });
-  // console.log({ columnsOrder });
-
-  function onDragEnd({ source, destination, type, draggableId }: any) {
-    if (
-      destination.droppableId === source.droppableId &&
-      source.index === destination.index
-    ) {
-      return;
-    }
-
-    if (!destination) {
-      return;
-    }
-
-    if (type === 'column') {
-      const newOrder = columnsOrder;
-      newOrder.splice(source.index, 1);
-      newOrder.splice(destination.index, 0, Number(draggableId));
-
-      setColumnsOrder([11, 12, 13]);
-    }
-
-    if (type === 'task') {
-      if (source.droppableId === destination.droppableId) {
-        // The card it was moved from one column to the same column
-        setColumnsInfos((prevColumnInfos: any) =>
-          prevColumnInfos.map((column: any) => {
-            if (column.id === destination.droppableId) {
-              const newTasksOrder = [...column.tasksIds];
-              newTasksOrder.splice(source.index, 1);
-              newTasksOrder.splice(destination.index, 0, draggableId);
-              return { ...column, tasksIds: newTasksOrder };
-            }
-            return column;
-          })
-        );
-      } else {
-        // Card it was moved from one column to the other column
-        setColumnsInfos((prevColumnInfos: any) =>
-          prevColumnInfos.map((column: any) => {
-            if (column.id === source.droppableId) {
-              // remove the task from its old column
-              const newTasksIds = [...column.tasksIds];
-              newTasksIds.splice(source.index, 1);
-              return { ...column, tasksIds: newTasksIds };
-            }
-
-            if (column.id === destination.droppableId) {
-              // add the card in the new column
-              const newTasksIds = [...column.tasksIds];
-              newTasksIds.splice(destination.index, 0, draggableId);
-              return { ...column, tasksIds: newTasksIds };
-            }
-
-            return column;
-          })
-        );
+  async function onDragEnd({ source, destination, type, draggableId }: any) {
+    try {
+      if (
+        destination.droppableId === source.droppableId &&
+        source.index === destination.index
+      ) {
+        return;
       }
+
+      if (!destination) {
+        return;
+      }
+
+      console.log({ source, destination });
+
+      if (type === 'column') {
+        const newOrder = columnsOrder;
+        newOrder.splice(source.index, 1);
+        newOrder.splice(destination.index, 0, Number(draggableId));
+
+        // Update the index in database
+        const columnsIndexAndId = newOrder.map((columnId, index) => ({
+          columnId,
+          index,
+        }));
+        await api.put(`/columns-order`, { columnsIndexAndId });
+
+        setColumnsOrder(newOrder);
+      }
+
+      if (type === 'task') {
+        if (source.droppableId === destination.droppableId) {
+          // The card it was moved from one column to the same column
+          setColumnsInfos((prevColumnInfos: any) =>
+            prevColumnInfos.map((column: any) => {
+              if (column.id === destination.droppableId) {
+                const newTasksOrder = [...column.tasksIds];
+                newTasksOrder.splice(source.index, 1);
+                newTasksOrder.splice(destination.index, 0, draggableId);
+                return { ...column, tasksIds: newTasksOrder };
+              }
+              return column;
+            })
+          );
+        } else {
+          // Card it was moved from one column to the other column
+          setColumnsInfos((prevColumnInfos: any) =>
+            prevColumnInfos.map((column: any) => {
+              if (column.id === source.droppableId) {
+                // remove the task from its old column
+                const newTasksIds = [...column.tasksIds];
+                newTasksIds.splice(source.index, 1);
+                return { ...column, tasksIds: newTasksIds };
+              }
+
+              if (column.id === destination.droppableId) {
+                // add the card in the new column
+                const newTasksIds = [...column.tasksIds];
+                newTasksIds.splice(destination.index, 0, draggableId);
+                return { ...column, tasksIds: newTasksIds };
+              }
+
+              return column;
+            })
+          );
+        }
+      }
+    } catch (err: any) {
+      console.log('Error in DragEnd Function', err);
     }
   }
 
@@ -101,13 +111,14 @@ export function Board() {
 
     // Save the new column id in the columnOrder table
     const indexOfNewColumn = columnsInfos.length;
-    const { data } = await api.post('/columns-order', {
+    // Saving the index of the new column in database
+    await api.post('/columns-order', {
       boardId: boardInfos.id,
       columnId: column.id,
       index: indexOfNewColumn,
     });
 
-    console.log({ data });
+    // console.log({ data });
 
     setColumnsInfos((prevColumns: any) => [
       ...prevColumns,
@@ -119,8 +130,6 @@ export function Board() {
     setIsToEditColumn(false);
   }
 
-  // console.log('ColumnsOrder', columnsOrder);
-  // console.log('columnsInfos', columnsInfos);
   if (!columnsOrder || !columnsInfos) {
     return <h1>loading</h1>;
   }

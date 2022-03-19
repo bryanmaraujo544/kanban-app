@@ -28,7 +28,6 @@ const cardsTags = [
 ];
 
 export function Column({ title, id, tasksIds, index }: ColumnProps) {
-  console.log('column-id: ', id);
   const [isToEditColumnTitle, setIsToEditColumnTitle] = useState(false);
   const [newColumnTitle, setNewColumnTitle] = useState(title);
 
@@ -43,8 +42,6 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
   const tasks = tasksIds?.map(
     (taskId) => allTasks.filter((task) => task.id === taskId)[0]
   );
-
-  console.log('tasks of each column', tasks);
 
   useEffect(() => {
     if (!isModalOpen) {

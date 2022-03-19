@@ -42,7 +42,7 @@ export function BoardContextProvider({ children }: BoardProviderProps) {
   const [allTasks, setAllTasks] = useState<Task[]>([]);
   const [columnsInfos, setColumnsInfos] = useState<any[]>([]);
   const [columnsOrder, setColumnsOrder] = useState([]);
-  const [boardInfos, setBoardInfos] = useState({});
+  const [boardInfos, setBoardInfos] = useState({} as any);
   const cookies = parseCookies();
 
   useEffect(() => {
@@ -61,7 +61,6 @@ export function BoardContextProvider({ children }: BoardProviderProps) {
         const {
           data: { columns },
         } = await api.get(`/columns/${board.id}`);
-        console.log({ columns });
 
         const {
           data: { tasks },
@@ -78,7 +77,11 @@ export function BoardContextProvider({ children }: BoardProviderProps) {
         });
         setColumnsInfos(columnsWithTasksIds);
 
-        const columnsId = columns.map((column: any) => column.id);
+        const {
+          data: { columnsOrder },
+        } = await api.get(`/columns-order/${board.id}`);
+
+        const columnsId = columnsOrder.map((column: any) => column.column_id);
         setColumnsOrder(columnsId);
       } catch (err) {
         console.log('Error from BoardContext UseEffect', err);
