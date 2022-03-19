@@ -41,7 +41,9 @@ export function Board() {
       if (type === 'column') {
         const newOrder = columnsOrder;
         newOrder.splice(source.index, 1);
-        newOrder.splice(destination.index, 0, Number(draggableId));
+
+        const columnId = draggableId.split('-')[1];
+        newOrder.splice(destination.index, 0, Number(columnId));
 
         // Update the index in database
         const columnsIndexAndId = newOrder.map((columnId, index) => ({
@@ -134,6 +136,8 @@ export function Board() {
     return <h1>loading</h1>;
   }
 
+  console.log({ columnsInfos, columnsOrder });
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="board" direction="horizontal" type="column">
@@ -145,7 +149,7 @@ export function Board() {
               );
               return (
                 <Column
-                  key={id}
+                  key={`column-${id}`}
                   id={id}
                   title={title}
                   tasksIds={tasksIds}

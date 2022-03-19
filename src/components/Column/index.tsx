@@ -116,7 +116,7 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
 
   return (
     <>
-      <Draggable draggableId={id.toString()} index={index}>
+      <Draggable draggableId={`column-${id}`} index={index}>
         {(provided) => (
           <Container
             {...provided.draggableProps}
