@@ -58,16 +58,33 @@ export function Board() {
       if (type === 'task') {
         if (source.droppableId === destination.droppableId) {
           // The card it was moved from one column to the same column
+
+          let newTasksOrder = [] as any;
           setColumnsInfos((prevColumnInfos: any) =>
             prevColumnInfos.map((column: any) => {
-              if (column.id === destination.droppableId) {
-                const newTasksOrder = [...column.tasksIds];
+              if (column.id.toString() === destination.droppableId) {
+                // Reordering the tasksIds array
+                newTasksOrder = [...column.tasksIds];
                 newTasksOrder.splice(source.index, 1);
-                newTasksOrder.splice(destination.index, 0, draggableId);
+                newTasksOrder.splice(destination.index, 0, Number(draggableId));
                 return { ...column, tasksIds: newTasksOrder };
               }
               return column;
             })
+          );
+
+          // the purpose of this array is that the newTaskOrder it is already in correct order,
+          // so I make this array containing the index of each taskId
+          const tasksOrderIdAndIndex = newTasksOrder?.map(
+            (taskId: number, index: number) => ({ taskId, index })
+          );
+
+          tasksOrderIdAndIndex.forEach(
+            ({ taskId, index }: { taskId: number; index: number }) => {
+              (async () => {
+                await api.put(`/tasks/${taskId}`, { index });
+              })();
+            }
           );
         } else {
           // Card it was moved from one column to the other column

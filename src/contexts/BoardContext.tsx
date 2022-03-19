@@ -71,8 +71,10 @@ export function BoardContextProvider({ children }: BoardProviderProps) {
           const tasksOfTheColumn = tasks.filter(
             (task: any) => task.column_id === column.id
           );
-          const tasksIds = tasksOfTheColumn.map((task: any) => task.id);
+          // Sorting the columns in ascending way by index value
+          tasksOfTheColumn.sort((a: any, b: any) => a.index - b.index);
 
+          const tasksIds = tasksOfTheColumn.map((task: any) => task.id);
           return { ...column, tasksIds };
         });
         setColumnsInfos(columnsWithTasksIds);

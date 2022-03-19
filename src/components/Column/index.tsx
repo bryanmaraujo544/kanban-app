@@ -39,9 +39,11 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
     useContext(BoardContext);
   const modalTextAreaRef = useRef<any>();
 
-  const tasks = tasksIds?.map(
+  const tasksOfTheColumn = tasksIds?.map(
     (taskId) => allTasks.filter((task) => task.id === taskId)[0]
   );
+
+  console.log(`Tasks of Column - ${title}`, tasksOfTheColumn);
 
   useEffect(() => {
     if (!isModalOpen) {
@@ -67,6 +69,7 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
         tag: newCardTag,
         columnId: id,
         boardId: boardInfos.id,
+        index: tasksOfTheColumn.length,
       });
 
       setAllTasks((prevAllTasks: any) => [...prevAllTasks, task]);
@@ -151,15 +154,17 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
-                  {tasks.map(({ id: taskId, title, tag }: any, index) => (
-                    <Task
-                      key={taskId}
-                      id={taskId}
-                      title={title}
-                      tag={tag}
-                      index={index}
-                    />
-                  ))}
+                  {tasksOfTheColumn.map(
+                    ({ id: taskId, title, tag }: any, index) => (
+                      <Task
+                        key={taskId}
+                        id={taskId}
+                        title={title}
+                        tag={tag}
+                        index={index}
+                      />
+                    )
+                  )}
                   {provided.placeholder}
                 </TasksContainer>
               )}
