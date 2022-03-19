@@ -24,7 +24,7 @@ export function Board() {
   } = useContext(BoardContext);
 
   console.log({ columnsInfos });
-  console.log({ columnsOrder });
+  // console.log({ columnsOrder });
 
   function onDragEnd({ source, destination, type, draggableId }: any) {
     if (
@@ -42,7 +42,8 @@ export function Board() {
       const newOrder = columnsOrder;
       newOrder.splice(source.index, 1);
       newOrder.splice(destination.index, 0, Number(draggableId));
-      setColumnsOrder(newOrder);
+
+      setColumnsOrder([11, 12, 13]);
     }
 
     if (type === 'task') {
@@ -90,11 +91,6 @@ export function Board() {
       toast.error('Type the column title', { autoClose: 1000 });
       return;
     }
-    // const newColumn = {
-    //   id: newColumnTitle.replace(' ', ''),
-    //   title: newColumnTitle,
-    //   tasksIds: [],
-    // };
 
     const {
       data: { column },
@@ -102,6 +98,16 @@ export function Board() {
       title: newColumnTitle,
       boardId: boardInfos.id,
     });
+
+    // Save the new column id in the columnOrder table
+    const indexOfNewColumn = columnsInfos.length;
+    const { data } = await api.post('/columns-order', {
+      boardId: boardInfos.id,
+      columnId: column.id,
+      index: indexOfNewColumn,
+    });
+
+    console.log({ data });
 
     setColumnsInfos((prevColumns: any) => [
       ...prevColumns,
@@ -113,6 +119,8 @@ export function Board() {
     setIsToEditColumn(false);
   }
 
+  // console.log('ColumnsOrder', columnsOrder);
+  // console.log('columnsInfos', columnsInfos);
   if (!columnsOrder || !columnsInfos) {
     return <h1>loading</h1>;
   }
@@ -122,7 +130,7 @@ export function Board() {
       <Droppable droppableId="board" direction="horizontal" type="column">
         {(provided) => (
           <Container {...provided.droppableProps} ref={provided.innerRef}>
-            {columnsOrder?.map((columnId, index) => {
+            {columnsOrder?.map((columnId: any, index: number) => {
               const { id, tasksIds, title }: any = columnsInfos?.find(
                 (columnInfos) => columnInfos.id === columnId
               );

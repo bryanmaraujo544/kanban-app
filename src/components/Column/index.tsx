@@ -40,7 +40,7 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
     useContext(BoardContext);
   const modalTextAreaRef = useRef<any>();
 
-  const tasks = tasksIds.map(
+  const tasks = tasksIds?.map(
     (taskId) => allTasks.filter((task) => task.id === taskId)[0]
   );
 

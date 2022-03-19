@@ -7,6 +7,7 @@ import jwt_decode from 'jwt-decode';
 import { parseCookies } from 'nookies';
 
 import api from '../services/utils/ApiClient';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 // import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface Task {
@@ -24,9 +25,9 @@ interface Column {
 interface ContextProps {
   allTasks: Task[];
   setAllTasks: any;
-  columnsInfos: Column[];
+  columnsInfos: any[];
   setColumnsInfos: any;
-  columnsOrder: any[];
+  columnsOrder: number[];
   setColumnsOrder: any;
   boardInfos: any;
 }
@@ -39,18 +40,12 @@ export const BoardContext = createContext({} as ContextProps);
 
 export function BoardContextProvider({ children }: BoardProviderProps) {
   const [allTasks, setAllTasks] = useState<Task[]>([]);
-  const [columnsInfos, setColumnsInfos] = useState<Column[]>([]);
+  const [columnsInfos, setColumnsInfos] = useState<any[]>([]);
   const [columnsOrder, setColumnsOrder] = useState([]);
   const [boardInfos, setBoardInfos] = useState({});
-  console.log({ boardInfos });
-
-  console.log({ columnsInfos });
-
   const cookies = parseCookies();
 
   useEffect(() => {
-    let mounted = true;
-
     (async () => {
       try {
         const user = jwt_decode(cookies?.token) as any;
@@ -66,6 +61,7 @@ export function BoardContextProvider({ children }: BoardProviderProps) {
         const {
           data: { columns },
         } = await api.get(`/columns/${board.id}`);
+        console.log({ columns });
 
         const {
           data: { tasks },
@@ -80,7 +76,6 @@ export function BoardContextProvider({ children }: BoardProviderProps) {
 
           return { ...column, tasksIds };
         });
-
         setColumnsInfos(columnsWithTasksIds);
 
         const columnsId = columns.map((column: any) => column.id);
@@ -89,8 +84,6 @@ export function BoardContextProvider({ children }: BoardProviderProps) {
         console.log('Error from BoardContext UseEffect', err);
       }
     })() as any;
-
-    return () => (mounted = false) as any;
   }, []);
 
   return (
