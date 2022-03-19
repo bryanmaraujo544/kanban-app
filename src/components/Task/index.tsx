@@ -63,7 +63,7 @@ export function Task({ id, title, tag, index }: TaskProps) {
   const contentRef = useClickOutside(handleUpdateTaskContent);
 
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable draggableId={id.toString()} index={index}>
       {(provided) => (
         <Container
           label={tag}

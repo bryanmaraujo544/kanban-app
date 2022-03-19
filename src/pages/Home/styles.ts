@@ -4,8 +4,8 @@ export const Container = styled.div`
   padding: 4.8rem;
   background: #f0ecfe;
   min-height: 100vh;
-  height: 100vh;
-  overflow-x: hidden;
+  height: 56rem;
+  max-height: 56rem;
   display: flex;
   flex-direction: column;
   gap: 3.2rem;

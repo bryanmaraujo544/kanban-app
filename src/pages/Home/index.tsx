@@ -20,6 +20,7 @@ export const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [membersInvited, setMembersInvited] = useState([]);
   const [user, setUser] = useState({} as User);
+  const [isLoading, setIsLoading] = useState(true);
 
   const cookies = parseCookies();
   const navigate = useNavigate();
@@ -31,10 +32,15 @@ export const Home = () => {
     }
 
     setUser(jwt_decode(cookies.token));
+    setIsLoading(false);
   }, []);
 
   function handleSearchMember() {
     setIsModalOpen(true);
+  }
+
+  if (isLoading) {
+    return <h1>Loading</h1>;
   }
 
   return (
@@ -47,7 +53,7 @@ export const Home = () => {
           </div>
           <div className="right-actions">
             <div className="members">
-              {membersInvited.map((member: any) => (
+              {membersInvited?.map((member: any) => (
                 <img alt="member" src={member.photo_url} />
               ))}
             </div>

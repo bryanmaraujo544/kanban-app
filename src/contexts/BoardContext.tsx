@@ -1,10 +1,13 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-return-assign */
 /* eslint-disable camelcase */
 /* eslint-disable react/jsx-no-constructed-context-values */
-import { useState, createContext, ReactNode, useEffect } from 'react';
+import { useState, createContext, ReactNode, useEffect, useRef } from 'react';
 import jwt_decode from 'jwt-decode';
 import { parseCookies } from 'nookies';
 
 import api from '../services/utils/ApiClient';
+// import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface Task {
   id: number;
@@ -25,6 +28,7 @@ interface ContextProps {
   setColumnsInfos: any;
   columnsOrder: any[];
   setColumnsOrder: any;
+  boardInfos: any;
 }
 
 interface BoardProviderProps {
@@ -36,44 +40,57 @@ export const BoardContext = createContext({} as ContextProps);
 export function BoardContextProvider({ children }: BoardProviderProps) {
   const [allTasks, setAllTasks] = useState<Task[]>([]);
   const [columnsInfos, setColumnsInfos] = useState<Column[]>([]);
-  const [columnsOrder, setColumnsOrder] = useState<number[]>([]);
+  const [columnsOrder, setColumnsOrder] = useState([]);
+  const [boardInfos, setBoardInfos] = useState({});
+  console.log({ boardInfos });
 
   console.log({ columnsInfos });
 
   const cookies = parseCookies();
 
   useEffect(() => {
+    let mounted = true;
+
     (async () => {
-      const user = jwt_decode(cookies.token) as any;
-      const {
-        data: { board },
-      } = await api.get(`/boards/${user?.id}`);
+      try {
+        const user = jwt_decode(cookies?.token) as any;
+        if (!user) {
+          return;
+        }
 
-      const {
-        data: { columns },
-      } = await api.get(`/columns/${board.id}`);
+        const {
+          data: { board },
+        } = await api.get(`/boards/${user?.id}`);
+        setBoardInfos(board);
 
-      const {
-        data: { tasks },
-      } = await api.get(`/tasks/${board.id}`);
-      console.log({ tasks });
-      setAllTasks(tasks);
+        const {
+          data: { columns },
+        } = await api.get(`/columns/${board.id}`);
 
-      const tasksIds = tasks.map((task: any) => task.id);
-      console.log(tasksIds);
+        const {
+          data: { tasks },
+        } = await api.get(`/tasks/${board.id}`);
+        setAllTasks(tasks);
 
-      const columnsWithTasksIds = columns.map((column: any) => ({
-        ...column,
-        tasksIds,
-      }));
+        const columnsWithTasksIds = columns.map((column: any) => {
+          const tasksOfTheColumn = tasks.filter(
+            (task: any) => task.column_id === column.id
+          );
+          const tasksIds = tasksOfTheColumn.map((task: any) => task.id);
 
-      // const { data: { tasks } } = await
+          return { ...column, tasksIds };
+        });
 
-      console.log(columnsWithTasksIds);
+        setColumnsInfos(columnsWithTasksIds);
 
-      setColumnsInfos(columnsWithTasksIds);
-      setColumnsOrder([1]);
-    })();
+        const columnsId = columns.map((column: any) => column.id);
+        setColumnsOrder(columnsId);
+      } catch (err) {
+        console.log('Error from BoardContext UseEffect', err);
+      }
+    })() as any;
+
+    return () => (mounted = false) as any;
   }, []);
 
   return (
@@ -85,6 +102,7 @@ export function BoardContextProvider({ children }: BoardProviderProps) {
         setColumnsInfos,
         columnsOrder,
         setColumnsOrder,
+        boardInfos,
       }}
     >
       {children}

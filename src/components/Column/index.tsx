@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 
 import { BoardContext } from '../../contexts/BoardContext';
 import { useClickOutside } from '../../hooks/useClickOutside';
+import api from '../../services/utils/ApiClient';
 import { Modal } from '../Modal';
 import { Task } from '../Task';
 import { Container, TasksContainer, TextArea, ModalForm, Tag } from './styles';
@@ -27,6 +28,7 @@ const cardsTags = [
 ];
 
 export function Column({ title, id, tasksIds, index }: ColumnProps) {
+  console.log('column-id: ', id);
   const [isToEditColumnTitle, setIsToEditColumnTitle] = useState(false);
   const [newColumnTitle, setNewColumnTitle] = useState(title);
 
@@ -34,7 +36,8 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
   const [newCardTitle, setNewCardTitle] = useState('');
   const [newCardTag, setNewCardTag] = useState('green');
 
-  const { allTasks, setAllTasks, setColumnsInfos } = useContext(BoardContext);
+  const { allTasks, setAllTasks, setColumnsInfos, boardInfos } =
+    useContext(BoardContext);
   const modalTextAreaRef = useRef<any>();
 
   const tasks = tasksIds.map(
@@ -51,7 +54,7 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
     }
   }, [isModalOpen]);
 
-  function handleCreateCard(e: any) {
+  async function handleCreateCard(e: any) {
     e.preventDefault();
 
     if (!newCardTitle) {
@@ -59,28 +62,34 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
       return;
     }
 
-    const task = {
-      id: newCardTitle.replace(' ', ''),
-      content: newCardTitle,
-      label: newCardTag,
-    };
+    try {
+      const {
+        data: { task },
+      } = await api.post('/tasks', {
+        title: newCardTitle,
+        tag: newCardTag,
+        columnId: id,
+        boardId: boardInfos.id,
+      });
 
-    setAllTasks((prevAllTasks: any) => [...prevAllTasks, task]);
+      setAllTasks((prevAllTasks: any) => [...prevAllTasks, task]);
 
-    setColumnsInfos((prevColumn: any) =>
-      prevColumn.map(({ id: columnId, title, tasksIds }: any) => {
-        if (columnId === id) {
-          return {
-            id,
-            title,
-            tasksIds: [...tasksIds, newCardTitle.replace(' ', '')],
-          };
-        }
-        return { id: columnId, title, tasksIds };
-      })
-    );
+      setColumnsInfos((prevColumn: any) =>
+        prevColumn.map((prevColumn: any) => {
+          if (prevColumn.id === id) {
+            return {
+              ...prevColumn,
+              tasksIds: [...tasksIds, task.id],
+            };
+          }
+          return { ...prevColumn };
+        })
+      );
 
-    setIsModalOpen(false);
+      setIsModalOpen(false);
+    } catch (err: any) {
+      toast.error(err.response.data.message);
+    }
   }
 
   function handleUpdateColumnTitle(e?: any) {

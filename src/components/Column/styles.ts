@@ -8,15 +8,15 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-  /* flex: 1; */
-  width: 31.5rem;
-  padding: 2.4rem 2rem;
+  min-width: 31rem;
+  padding: 2rem 1.6rem;
   background: #fff;
   border-radius: 0.4rem;
-  max-height: 100%;
   margin: 0 0.8rem;
   box-shadow: 0 0.2rem 0.4rem #00000005;
   cursor: default !important;
+  overflow-y: hidden;
+  max-height: 100%;
 
   .header {
     display: flex;
@@ -85,9 +85,10 @@ export const TasksContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 0.8rem;
-  flex: 1;
+  /* flex: 1; */
   overflow-y: scroll;
   padding: 0 0.8rem;
+  height: 100%;
 
   ::-webkit-scrollbar {
     width: 1rem;

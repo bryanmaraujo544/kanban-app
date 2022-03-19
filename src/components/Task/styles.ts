@@ -21,7 +21,7 @@ export const Container = styled.div<Props>`
   background: #f0ecfe;
   font-size: 1.6rem;
   border-radius: 0.4rem;
-  margin: 0.8rem 0;
+  margin: 0.4rem 0;
   max-width: 100%;
   width: 100%;
   cursor: default !important;

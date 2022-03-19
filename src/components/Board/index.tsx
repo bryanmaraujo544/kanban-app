@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable react/jsx-no-bind */
 /* eslint-disable react/jsx-props-no-spreading */
 import { useContext, useState } from 'react';
@@ -6,6 +7,7 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { toast } from 'react-toastify';
 
 import { BoardContext } from '../../contexts/BoardContext';
+import api from '../../services/utils/ApiClient';
 import { Column } from '../Column';
 import { Container, AddColumn } from './styles';
 
@@ -13,8 +15,16 @@ export function Board() {
   const [isToEditColumn, setIsToEditColumn] = useState(false);
   const [newColumnTitle, setNewColumnTitle] = useState('');
 
-  const { columnsInfos, columnsOrder, setColumnsOrder, setColumnsInfos } =
-    useContext(BoardContext);
+  const {
+    columnsInfos,
+    columnsOrder,
+    setColumnsOrder,
+    setColumnsInfos,
+    boardInfos,
+  } = useContext(BoardContext);
+
+  console.log({ columnsInfos });
+  console.log({ columnsOrder });
 
   function onDragEnd({ source, destination, type, draggableId }: any) {
     if (
@@ -31,7 +41,7 @@ export function Board() {
     if (type === 'column') {
       const newOrder = columnsOrder;
       newOrder.splice(source.index, 1);
-      newOrder.splice(destination.index, 0, draggableId);
+      newOrder.splice(destination.index, 0, Number(draggableId));
       setColumnsOrder(newOrder);
     }
 
@@ -74,23 +84,37 @@ export function Board() {
     }
   }
 
-  function handleCreateColumn(e: any) {
+  async function handleCreateColumn(e: any) {
     e.preventDefault();
     if (!newColumnTitle) {
       toast.error('Type the column title', { autoClose: 1000 });
       return;
     }
-    const newColumn = {
-      id: newColumnTitle.replace(' ', ''),
+    // const newColumn = {
+    //   id: newColumnTitle.replace(' ', ''),
+    //   title: newColumnTitle,
+    //   tasksIds: [],
+    // };
+
+    const {
+      data: { column },
+    } = await api.post('/columns', {
       title: newColumnTitle,
-      tasksIds: [],
-    };
-    setColumnsInfos((prevColumns: any) => [...prevColumns, newColumn]);
-    setColumnsOrder((prevOrder: string[]) => [
-      ...prevOrder,
-      newColumnTitle.replace(' ', ''),
+      boardId: boardInfos.id,
+    });
+
+    setColumnsInfos((prevColumns: any) => [
+      ...prevColumns,
+      { ...column, tasksIds: [] },
     ]);
+    // setColumnsOrder((prevOrder: string[]) => [...prevOrder, column.id]);
+    setColumnsOrder([...columnsOrder, column.id]);
+
     setIsToEditColumn(false);
+  }
+
+  if (!columnsOrder || !columnsInfos) {
+    return <h1>loading</h1>;
   }
 
   return (
@@ -98,10 +122,10 @@ export function Board() {
       <Droppable droppableId="board" direction="horizontal" type="column">
         {(provided) => (
           <Container {...provided.droppableProps} ref={provided.innerRef}>
-            {columnsOrder.map((columnId, index) => {
-              const { id, tasksIds, title } = columnsInfos.filter(
+            {columnsOrder?.map((columnId, index) => {
+              const { id, tasksIds, title }: any = columnsInfos?.find(
                 (columnInfos) => columnInfos.id === columnId
-              )[0];
+              );
               return (
                 <Column
                   key={id}

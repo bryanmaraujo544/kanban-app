@@ -5,8 +5,9 @@ export const Container = styled.main`
   align-items: flex-start;
   flex: 1;
   padding: 1.6rem;
-  overflow: hidden;
+  overflow-y: hidden;
   overflow-x: scroll;
+  height: 100%;
 
   ::-webkit-scrollbar {
     height: 1rem;
