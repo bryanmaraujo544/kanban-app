@@ -40,6 +40,7 @@ export const CreateTaskModal = ({
       return;
     }
   }, [isModalOpen]);
+
   async function handleCreateCard(e: any) {
     e.preventDefault();
 

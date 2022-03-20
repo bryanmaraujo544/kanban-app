@@ -31,7 +31,11 @@ export const Modal = ({ children, isOpen, setIsOpen, modalTitle }: Props) => {
       animate={overlayControls}
       variants={overlayVariants}
     >
-      <ModalContainer as={motion.div} variants={modalVariants}>
+      <ModalContainer
+        as={motion.div}
+        variants={modalVariants}
+        isLarge={modalTitle.length > 18}
+      >
         <div className="header">
           <p className="title">{modalTitle}</p>
           <button

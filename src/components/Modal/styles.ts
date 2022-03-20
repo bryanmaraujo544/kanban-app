@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+interface ModalProps {
+  isLarge: boolean;
+}
+
 export const Container = styled.div`
   display: none;
   justify-content: center;
@@ -12,15 +16,17 @@ export const Container = styled.div`
   background: #00000040;
 `;
 
-export const ModalContainer = styled.div`
+export const ModalContainer = styled.div<ModalProps>`
   display: flex;
   flex-direction: column;
   gap: 2.2rem;
   border-radius: 0.4rem;
   background: #fff;
   padding: 2.4rem;
-  min-width: 40rem;
-  max-width: 60rem;
+  /* min-width: 40rem; */
+  width: 100%;
+  max-width: 40rem;
+  margin: 0 1.6rem;
 
   .header {
     display: flex;
@@ -32,7 +38,7 @@ export const ModalContainer = styled.div`
     .title {
       color: #6c757d;
       font-weight: 500;
-      font-size: 2.2rem;
+      font-size: ${({ isLarge }) => (isLarge ? '1.8rem' : '2.2rem')};
     }
 
     .close-btn {

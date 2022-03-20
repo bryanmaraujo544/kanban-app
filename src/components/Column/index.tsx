@@ -10,6 +10,7 @@ import { BoardContext } from '../../contexts/BoardContext';
 import { useClickOutside } from '../../hooks/useClickOutside';
 import { Task } from '../Task';
 import { CreateTaskModal } from './CreateTaskModal';
+import { DeleteColumnModal } from './DeleteColumnModal';
 import { Container, TasksContainer } from './styles';
 
 interface ColumnProps {
@@ -22,16 +23,14 @@ interface ColumnProps {
 export function Column({ title, id, tasksIds, index }: ColumnProps) {
   const [isToEditColumnTitle, setIsToEditColumnTitle] = useState(false);
   const [newColumnTitle, setNewColumnTitle] = useState(title);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const { allTasks, setColumnsInfos } = useContext(BoardContext);
+
+  const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
+  const [isDeleteColumnModalOpen, setIsDeleteColumnModalOpen] = useState(false);
 
   const tasksOfTheColumn = tasksIds?.map(
     (taskId) => allTasks.filter((task) => task.id === taskId)[0]
   );
-
-  console.log(`Tasks of Column - ${title}`, tasksOfTheColumn);
 
   function handleUpdateColumnTitle(e?: any) {
     if (!isToEditColumnTitle) {
@@ -85,7 +84,7 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
               )}
               <MdDelete
                 className="remove-icon"
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => setIsDeleteColumnModalOpen(true)}
               />
             </header>
 
@@ -114,7 +113,7 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
             <button
               type="button"
               className="add-card-btn"
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => setIsCreateTaskModalOpen(true)}
             >
               <AiOutlinePlus className="add-icon" />
               <p>Add card</p>
@@ -123,11 +122,16 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
         )}
       </Draggable>
       <CreateTaskModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
+        isModalOpen={isCreateTaskModalOpen}
+        setIsModalOpen={setIsCreateTaskModalOpen}
         tasksOfTheColumn={tasksOfTheColumn}
         columnId={id}
         tasksIds={tasksIds}
+      />
+      <DeleteColumnModal
+        isOpen={isDeleteColumnModalOpen}
+        setIsOpen={setIsDeleteColumnModalOpen}
+        columnId={id}
       />
     </>
   );

@@ -4,7 +4,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-  min-width: 31rem;
+  width: 31rem;
   max-height: 100%;
   padding: 2rem 1.6rem;
   margin: 0 0.8rem;
@@ -89,7 +89,7 @@ export const TasksContainer = styled.div`
   overflow-y: scroll;
   padding: 0 0.8rem;
   height: 100%;
-
+  overflow-x: hidden;
   ::-webkit-scrollbar {
     width: 1rem;
   }

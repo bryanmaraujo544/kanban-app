@@ -36,8 +36,6 @@ export function Board() {
         return;
       }
 
-      console.log({ source, destination });
-
       if (type === 'column') {
         const newOrder = columnsOrder;
         newOrder.splice(source.index, 1);
@@ -124,44 +122,45 @@ export function Board() {
 
   async function handleCreateColumn(e: any) {
     e.preventDefault();
-    if (!newColumnTitle) {
-      toast.error('Type the column title', { autoClose: 1000 });
-      return;
+
+    try {
+      if (!newColumnTitle) {
+        toast.error('Type the column title', { autoClose: 1000 });
+        return;
+      }
+
+      const {
+        data: { column },
+      } = await api.post('/columns', {
+        title: newColumnTitle,
+        boardId: boardInfos.id,
+      });
+
+      // Save the new column id in the columnOrder table
+      const indexOfNewColumn = columnsInfos.length;
+      // Saving the index of the new column in database
+      await api.post('/columns-order', {
+        boardId: boardInfos.id,
+        columnId: column.id,
+        index: indexOfNewColumn,
+      });
+
+      setColumnsInfos((prevColumns: any) => [
+        ...prevColumns,
+        { ...column, tasksIds: [] },
+      ]);
+      // setColumnsOrder((prevOrder: string[]) => [...prevOrder, column.id]);
+      setColumnsOrder([...columnsOrder, column.id]);
+
+      setIsToEditColumn(false);
+    } catch (err: any) {
+      toast.error(err.response.data.message);
     }
-
-    const {
-      data: { column },
-    } = await api.post('/columns', {
-      title: newColumnTitle,
-      boardId: boardInfos.id,
-    });
-
-    // Save the new column id in the columnOrder table
-    const indexOfNewColumn = columnsInfos.length;
-    // Saving the index of the new column in database
-    await api.post('/columns-order', {
-      boardId: boardInfos.id,
-      columnId: column.id,
-      index: indexOfNewColumn,
-    });
-
-    // console.log({ data });
-
-    setColumnsInfos((prevColumns: any) => [
-      ...prevColumns,
-      { ...column, tasksIds: [] },
-    ]);
-    // setColumnsOrder((prevOrder: string[]) => [...prevOrder, column.id]);
-    setColumnsOrder([...columnsOrder, column.id]);
-
-    setIsToEditColumn(false);
   }
 
   if (!columnsOrder || !columnsInfos) {
     return <h1>loading</h1>;
   }
-
-  console.log({ columnsInfos, columnsOrder });
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>

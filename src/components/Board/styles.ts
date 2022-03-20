@@ -30,6 +30,7 @@ export const Container = styled.main`
 
 export const AddColumn = styled.div`
   min-width: 25rem;
+  max-width: 30.5rem;
   padding: 1.6rem;
   background: #fff;
   border-radius: 0.4rem;

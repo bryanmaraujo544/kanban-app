@@ -4,8 +4,6 @@ import { IoEnter } from 'react-icons/io5';
 import { Container, BoardsContainer, Board } from './styles';
 
 export const Boards = () => (
-  // console.log('boards');
-
   <Container>
     <header className="header">
       <h1 className="title">My Boards</h1>

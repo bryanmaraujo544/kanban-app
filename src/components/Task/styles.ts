@@ -23,8 +23,15 @@ export const Container = styled.div<Props>`
   border-radius: 0.4rem;
   margin: 0.4rem 0;
   max-width: 100%;
-  width: 100%;
   cursor: default !important;
+
+  .task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    width: 100%;
+  }
 
   .edit-form {
     input {
@@ -56,10 +63,51 @@ export const Tag = styled.div<TagProps>`
   height: 1rem;
   border-radius: 0.3rem;
   background: ${({ label }) =>
-    label === 'green' ? '#70e000' : label === 'red' ? '#ef233c' : '#f9a620'};
+    label === 'green' ? '#70e000' : label === 'red' ? '#' : '#f9a620'};
   cursor: pointer;
 
   &:hover {
     opacity: 0.8;
+  }
+`;
+
+export const MenuContainer = styled.div`
+  position: relative;
+
+  .menu-icon {
+    cursor: pointer;
+  }
+
+  .menu {
+    position: absolute;
+    right: 0;
+    z-index: 999;
+    /* background-color: #e9ecef; */
+    /* padding: 0.6rem; */
+    border-radius: 0.4rem;
+
+    button {
+      background: #fff;
+      border: none;
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
+      border-radius: 0.4rem;
+      padding: 0.6rem 0.8rem;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #495057;
+      transition: all 0.2s ease-in;
+      box-shadow: 0 0.1rem 0.3rem #00000005;
+
+      &:hover {
+        background: #dee2e6;
+      }
+
+      .delete-icon {
+        color: #ef233c;
+        font-size: 1.4rem;
+      }
+    }
   }
 `;

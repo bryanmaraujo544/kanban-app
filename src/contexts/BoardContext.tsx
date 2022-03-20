@@ -12,8 +12,11 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface Task {
   id: number;
-  content: string;
-  label: 'red' | 'orange' | 'green';
+  title: string;
+  tag: 'red' | 'orange' | 'green';
+  column_id: number;
+  index: number;
+  board_id: number;
 }
 
 interface Column {
