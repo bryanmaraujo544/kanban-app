@@ -8,6 +8,7 @@ import { MdDelete } from 'react-icons/md';
 
 import { BoardContext } from '../../contexts/BoardContext';
 import { useClickOutside } from '../../hooks/useClickOutside';
+import api from '../../services/utils/ApiClient';
 import { Task } from '../Task';
 import { CreateTaskModal } from './CreateTaskModal';
 import { DeleteColumnModal } from './DeleteColumnModal';
@@ -32,27 +33,33 @@ export function Column({ title, id, tasksIds, index }: ColumnProps) {
     (taskId) => allTasks.filter((task) => task.id === taskId)[0]
   );
 
-  function handleUpdateColumnTitle(e?: any) {
-    if (!isToEditColumnTitle) {
-      return;
-    }
+  async function handleUpdateColumnTitle(e?: any) {
+    try {
+      if (!isToEditColumnTitle) {
+        return;
+      }
 
-    if (!newColumnTitle) {
-      setNewColumnTitle(title);
+      if (!newColumnTitle) {
+        setNewColumnTitle(title);
+        setIsToEditColumnTitle(false);
+        return;
+      }
+
+      e?.preventDefault();
       setIsToEditColumnTitle(false);
-      return;
-    }
+      setColumnsInfos((prevColumns: any) =>
+        prevColumns.map((column: any) => {
+          if (column.id === id) {
+            return { ...column, title: newColumnTitle };
+          }
+          return column;
+        })
+      );
 
-    e?.preventDefault();
-    setIsToEditColumnTitle(false);
-    setColumnsInfos((prevColumns: any) =>
-      prevColumns.map((column: any) => {
-        if (column.id === id) {
-          return { ...column, title: newColumnTitle };
-        }
-        return column;
-      })
-    );
+      await api.put(`columns/${id}`, { title: newColumnTitle });
+    } catch (err: any) {
+      console.log(err);
+    }
   }
 
   const columnTitleRef = useClickOutside(() => handleUpdateColumnTitle());
