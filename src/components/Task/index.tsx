@@ -20,19 +20,20 @@ interface TaskProps {
 }
 
 export function Task({ id, title, tag, index }: TaskProps) {
-  const [newContent, setNewContent] = useState(title);
+  const [newTitle, setNewTitle] = useState(title);
   const [isToEdit, setIsToEdit] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const { setAllTasks, allTasks, setColumnsInfos } = useContext(BoardContext);
   const deleteButtonRef = useClickOutside(() => setIsMenuOpen(false));
 
-  function handleUpdateTaskContent(e?: any) {
+  async function handleUpdateTaskContent(e?: any) {
     if (!isToEdit) {
       return;
     }
-    if (!newContent) {
-      setNewContent(title);
+
+    if (!newTitle) {
+      setNewTitle(title);
       setIsToEdit(false);
       return;
     }
@@ -41,11 +42,14 @@ export function Task({ id, title, tag, index }: TaskProps) {
     setAllTasks((prevTasks: any) =>
       prevTasks.map((task: any) => {
         if (task.id === id) {
-          return { ...task, content: newContent };
+          return { ...task, title: newTitle };
         }
         return task;
       })
     );
+
+    await api.put(`/tasks/${id}`, { title: newTitle });
+
     setIsToEdit(false);
   }
 
@@ -77,33 +81,39 @@ export function Task({ id, title, tag, index }: TaskProps) {
   }
 
   async function handleDeleteTask() {
-    const columnIdFromTask = allTasks.find((task) => task.id === id)?.column_id;
+    try {
+      const columnIdFromTask = allTasks.find(
+        (task) => task.id === id
+      )?.column_id;
 
-    setColumnsInfos((prevColumns: any) =>
-      prevColumns.map((column: any) => {
-        if (column.id === columnIdFromTask) {
-          // Taking out the id the task deleted from taskIds array of column
-          // This tasksIds array contains the id the tasks in each column
-          const newTasksIds = [...column.tasksIds].filter(
-            (taskId) => taskId !== id
-          );
-          return {
-            ...column,
-            tasksIds: newTasksIds,
-          };
-        }
-        return column;
-      })
-    );
+      setColumnsInfos((prevColumns: any) =>
+        prevColumns.map((column: any) => {
+          if (column.id === columnIdFromTask) {
+            // Taking out the id the task deleted from taskIds array of column
+            // This tasksIds array contains the id the tasks in each column
+            const newTasksIds = [...column.tasksIds].filter(
+              (taskId) => taskId !== id
+            );
+            return {
+              ...column,
+              tasksIds: newTasksIds,
+            };
+          }
+          return column;
+        })
+      );
 
-    // Taking out the task of the alltasks object
-    setAllTasks((prevTasks: any) =>
-      prevTasks.filter((task: any) => task.id !== id)
-    );
+      // Taking out the task of the alltasks object
+      setAllTasks((prevTasks: any) =>
+        prevTasks.filter((task: any) => task.id !== id)
+      );
 
-    await api.delete(`/tasks/${id}`);
+      await api.delete(`/tasks/${id}`);
 
-    setIsMenuOpen(false);
+      setIsMenuOpen(false);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -143,8 +153,8 @@ export function Task({ id, title, tag, index }: TaskProps) {
               className="edit-form"
             >
               <input
-                value={newContent}
-                onChange={(e) => setNewContent(e.target.value)}
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
                 autoFocus
               />
             </form>
