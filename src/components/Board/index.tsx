@@ -73,19 +73,12 @@ export function Board() {
             })
           );
 
-          // the purpose of this array is that the newTaskOrder it is already in correct order,
-          // so I make this array containing the index of each taskId
-          const tasksOrderIdAndIndex = newTasksOrder?.map(
-            (taskId: number, index: number) => ({ taskId, index })
-          );
-
-          tasksOrderIdAndIndex.forEach(
-            ({ taskId, index }: { taskId: number; index: number }) => {
-              (async () => {
-                await api.put(`/tasks/${taskId}`, { index });
-              })();
-            }
-          );
+          // Saving in the database
+          newTasksOrder.forEach((taskId: any, index: any) => {
+            (async () => {
+              await api.put(`/tasks/${taskId}`, { index });
+            })();
+          });
         } else {
           // Card it was moved from one column to the other column
           setColumnsInfos((prevColumnInfos: any) =>

@@ -3,11 +3,9 @@ import styled from 'styled-components';
 export const Container = styled.main`
   display: flex;
   align-items: flex-start;
-  flex: 1;
-  padding: 1.6rem;
+  padding: 1.6rem 0;
   overflow-y: hidden;
   overflow-x: scroll;
-  height: 100%;
 
   ::-webkit-scrollbar {
     height: 1rem;

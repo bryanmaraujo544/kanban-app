@@ -1,19 +1,18 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  padding: 4.8rem;
+  padding: 3.2rem;
   background: #f0ecfe;
   min-height: 100vh;
-  height: 56rem;
-  max-height: 56rem;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 3.2rem;
+  gap: 1.6rem;
 `;
 
 export const Header = styled.header`
   width: 100%;
-  padding: 0 2.4rem;
+  padding: 0 0 0 0.8rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -22,6 +21,7 @@ export const Header = styled.header`
     display: flex;
     align-items: center;
     gap: 1.2rem;
+
     p {
       font-size: 1.6rem;
       font-size: 500;
@@ -30,8 +30,8 @@ export const Header = styled.header`
     }
 
     img {
-      width: 3.6rem;
-      height: 3.6rem;
+      width: 3.2rem;
+      height: 3.2rem;
       object-fit: cover;
       border-radius: 0.6rem;
     }

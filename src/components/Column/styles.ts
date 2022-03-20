@@ -1,22 +1,22 @@
 import styled from 'styled-components';
 
-interface TagProps {
-  color: string;
-}
-
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
   min-width: 31rem;
+  max-height: 100%;
   padding: 2rem 1.6rem;
-  background: #fff;
-  border-radius: 0.4rem;
   margin: 0 0.8rem;
   box-shadow: 0 0.2rem 0.4rem #00000005;
-  cursor: default !important;
   overflow-y: hidden;
-  max-height: 100%;
+  cursor: default !important;
+  background: #fff;
+  border-radius: 0.4rem;
+
+  @media (max-width: 468px) {
+    min-width: 22rem;
+  }
 
   .header {
     display: flex;
@@ -41,14 +41,14 @@ export const Container = styled.div`
         outline: none;
       }
     }
-    .add-icon {
+    .remove-icon {
       font-size: 2.4rem;
       color: #495057;
       cursor: pointer;
       transition: color 0.2s linear;
 
       &:hover {
-        color: #000;
+        color: #ef233c;
       }
     }
   }
@@ -110,63 +110,4 @@ export const TasksContainer = styled.div`
       background: #495057;
     }
   }
-`;
-
-export const TextArea = styled.textarea`
-  resize: vertical;
-  font-size: 1.8rem;
-  color: #343a40;
-  padding: 0.8rem;
-  border: 0.1rem solid #adb5bd;
-  border-radius: 0.4rem;
-  min-height: 7.2rem;
-
-  &:focus {
-    outline: 0.2rem solid #495057;
-  }
-`;
-
-export const ModalForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-  margin-top: 0.8rem;
-
-  .tags {
-    display: flex;
-    gap: 0.8rem;
-  }
-
-  .modal-btn {
-    border: 0;
-    background: #343a40;
-    color: #f8f9fa;
-    padding: 0.8rem;
-    border-radius: 0.4rem;
-    transition: background 0.2s linear;
-    font-size: 1.6rem;
-    font-size: 500;
-    margin-top: 1.2rem;
-
-    &:hover {
-      background: #000;
-    }
-
-    &:focus {
-      background: #343a40;
-    }
-  }
-`;
-
-export const Tag = styled.div<TagProps>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  height: 2rem;
-  padding: 0.2rem;
-  color: #fff;
-  border-radius: 0.4rem;
-  background: ${({ color }) => color};
-  cursor: pointer;
 `;
