@@ -90,23 +90,38 @@ export function Board() {
           // Card it was moved from one column to the other column
           setColumnsInfos((prevColumnInfos: any) =>
             prevColumnInfos.map((column: any) => {
-              if (column.id === source.droppableId) {
+              if (column.id.toString() === source.droppableId) {
                 // remove the task from its old column
                 const newTasksIds = [...column.tasksIds];
                 newTasksIds.splice(source.index, 1);
                 return { ...column, tasksIds: newTasksIds };
               }
 
-              if (column.id === destination.droppableId) {
+              if (column.id.toString() === destination.droppableId) {
                 // add the card in the new column
                 const newTasksIds = [...column.tasksIds];
-                newTasksIds.splice(destination.index, 0, draggableId);
+                newTasksIds.splice(destination.index, 0, Number(draggableId));
+
+                // Changing the task order in the column
+                newTasksIds.forEach((taskId, index) => {
+                  (async () => {
+                    api.put(`/tasks/${taskId}`, { index });
+                  })();
+                });
+
                 return { ...column, tasksIds: newTasksIds };
               }
 
               return column;
             })
           );
+
+          // Changing the columnId of the task dragged
+          const taskIdDragged = draggableId;
+          const columnIdWhereTaskWasDropped = Number(destination.droppableId);
+          await api.put(`/tasks/${taskIdDragged}`, {
+            column_id: columnIdWhereTaskWasDropped,
+          });
         }
       }
     } catch (err: any) {
