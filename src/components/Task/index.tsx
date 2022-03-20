@@ -55,16 +55,19 @@ export function Task({ id, title, tag, index }: TaskProps) {
     return 'green';
   }
 
-  function handleChangeTag() {
+  async function handleChangeTag() {
     setAllTasks((prevTasks: any) =>
       prevTasks.map((task: any) => {
         if (task.id === id) {
-          const newTag = spinTag(task.label);
-          return { ...task, label: newTag };
+          const newTag = spinTag(task.tag);
+          return { ...task, tag: newTag };
         }
         return task;
       })
     );
+
+    const newTag = spinTag(tag);
+    await api.put(`tasks/${id}`, { tag: newTag });
   }
 
   const contentRef = useClickOutside(handleUpdateTaskContent);

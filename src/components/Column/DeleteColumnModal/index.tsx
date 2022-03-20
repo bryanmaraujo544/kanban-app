@@ -11,8 +11,7 @@ interface Props {
 }
 
 export const DeleteColumnModal = ({ isOpen, setIsOpen, columnId }: Props) => {
-  const { setColumnsInfos, columnsInfos, setColumnsOrder } =
-    useContext(BoardContext);
+  const { setColumnsInfos, setColumnsOrder } = useContext(BoardContext);
 
   async function handleDeleteColumn() {
     setColumnsOrder((prevOrder: number[]) =>
