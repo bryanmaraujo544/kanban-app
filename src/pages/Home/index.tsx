@@ -2,13 +2,13 @@
 import { useEffect, useState } from 'react';
 import { parseCookies } from 'nookies';
 import jwt_decode from 'jwt-decode';
-import { AiOutlinePlus } from 'react-icons/ai';
 
 import { useNavigate } from 'react-router-dom';
 import { BoardContextProvider } from '../../contexts/BoardContext';
-import { Container, Header } from './styles';
+import { Container } from './styles';
 import { Board } from '../../components/Board';
 import { InviteMembers } from '../../components/InviteMembers';
+import { Header } from './Header';
 
 interface User {
   id: number;
@@ -35,10 +35,6 @@ export const Home = () => {
     setIsLoading(false);
   }, []);
 
-  function handleSearchMember() {
-    setIsModalOpen(true);
-  }
-
   if (isLoading) {
     return <h1>Loading</h1>;
   }
@@ -46,32 +42,17 @@ export const Home = () => {
   return (
     <BoardContextProvider>
       <Container>
-        <Header>
-          <div className="user-infos">
-            <p>{user?.name}</p>
-            <img src={user?.profileImageUrl} alt="user profile" />
-          </div>
-          <div className="right-actions">
-            <div className="members">
-              {membersInvited?.map((member: any) => (
-                <img alt="member" src={member.photo_url} />
-              ))}
-            </div>
-            <button
-              type="button"
-              onClick={handleSearchMember}
-              className="invite-member-btn"
-            >
-              <AiOutlinePlus className="icon" />
-              Invite a Member
-            </button>
-          </div>
-        </Header>
+        <Header
+          membersInvited={membersInvited}
+          user={user}
+          setIsModalOpen={setIsModalOpen}
+        />
         <Board />
         <InviteMembers
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
           setMembersInvited={setMembersInvited}
+          membersInvited={membersInvited}
         />
       </Container>
     </BoardContextProvider>

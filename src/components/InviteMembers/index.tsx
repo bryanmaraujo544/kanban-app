@@ -1,17 +1,20 @@
 /* eslint-disable react/no-unused-prop-types */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { GrFormClose } from 'react-icons/gr';
 import { motion } from 'framer-motion';
 import { AiOutlinePlus } from 'react-icons/ai';
 
+import { toast } from 'react-toastify';
 import { Container, MembersFound, MemberFound } from './styles';
 import { Modal } from '../Modal';
 import api from '../../services/utils/ApiClient';
+import { BoardContext } from '../../contexts/BoardContext';
 
 interface Props {
   isModalOpen: boolean;
   setIsModalOpen: any;
   setMembersInvited: any;
+  membersInvited: any[];
 }
 
 interface User {
@@ -25,6 +28,7 @@ export const InviteMembers = ({
   isModalOpen,
   setIsModalOpen,
   setMembersInvited,
+  membersInvited,
 }: Props) => {
   const [allUsers, setAllUsers] = useState([]);
   const [, setIsLoading] = useState(false);
@@ -33,7 +37,7 @@ export const InviteMembers = ({
     [] as any
   );
   const [membersFound, setMembersFound] = useState([] as any);
-
+  const { boardInfos } = useContext(BoardContext);
   useEffect(() => {
     (async () => {
       const {
@@ -59,11 +63,21 @@ export const InviteMembers = ({
     const alreadySelected = membersSelectedToInvite.some(
       (member: any) => member.email === user.email
     );
-    if (!alreadySelected) {
-      setMembersSelectedToInvite((prev: any) => [...prev, user]);
-    } else {
-      window.alert('Already selected');
+
+    const alreadyInvited = membersInvited.some(
+      (member: any) => member.email === user.email
+    );
+
+    if (alreadyInvited) {
+      toast.warning('You already invited this user');
+      return;
     }
+
+    if (alreadySelected) {
+      toast.error('You already selected this user');
+      return;
+    }
+    setMembersSelectedToInvite((prev: any) => [...prev, user]);
   }
 
   function handleRemoveMemberFromSelectedList(email: string) {
@@ -73,11 +87,28 @@ export const InviteMembers = ({
   }
 
   function handleInviteMembers() {
+    console.log({ membersSelectedToInvite });
     if (membersSelectedToInvite.length === 0) {
-      window.alert('Select someone');
+      toast.warning('Select someone!');
       return;
     }
     setMembersInvited(membersSelectedToInvite);
+
+    // Say to server that a member was invited
+
+    // Storage in collaborators table the members invited to this board
+    // and in server emit an members invited action and in client receive this
+    // action and show the notification if the id is equal to the id in invitation
+    membersSelectedToInvite.forEach(async (member: User) => {
+      const {
+        data: { collaboratorAdded },
+      } = await api.post('/collaborators', {
+        userId: member.id,
+        boardId: boardInfos.id,
+      });
+      console.log({ collaboratorAdded });
+    });
+
     setIsModalOpen(false);
     setMembersSelectedToInvite([]);
     setMembersFound([]);
@@ -94,7 +125,7 @@ export const InviteMembers = ({
         <div className="members-selected">
           {membersSelectedToInvite?.map(
             ({ name, email }: { name: string; email: string }) => (
-              <div className="member-selected">
+              <div className="member-selected" key={`list-${email}`}>
                 {name}
                 <GrFormClose
                   className="icon"
@@ -123,7 +154,7 @@ export const InviteMembers = ({
           animate={{ display: memberEmail.length > 0 ? 'flex' : 'none' }}
         >
           {membersFound?.map((user: User) => (
-            <MemberFound isSelected>
+            <MemberFound isSelected key={`found-${user.email}`}>
               <div className="infos">
                 <img src={user.photo_url} alt="member" />
                 <div className="name-email">
