@@ -38,6 +38,7 @@ export const InviteMembers = ({
   );
   const [membersFound, setMembersFound] = useState([] as any);
   const { boardInfos } = useContext(BoardContext);
+
   useEffect(() => {
     (async () => {
       const {
@@ -87,7 +88,6 @@ export const InviteMembers = ({
   }
 
   function handleInviteMembers() {
-    console.log({ membersSelectedToInvite });
     if (membersSelectedToInvite.length === 0) {
       toast.warning('Select someone!');
       return;
@@ -106,7 +106,6 @@ export const InviteMembers = ({
         userId: member.id,
         boardId: boardInfos.id,
       });
-      console.log({ collaboratorAdded });
     });
 
     setIsModalOpen(false);

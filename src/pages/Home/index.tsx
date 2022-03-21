@@ -29,10 +29,9 @@ interface MyBoard {
 }
 
 export const Home = () => {
-  const [user, setUser] = useState({} as any);
+  const [, setUser] = useState({} as any);
   const [myBoards, setMyBoards] = useState([]);
   const cookies = parseCookies();
-  console.log({ user, myBoards });
   const navigate = useNavigate();
 
   useEffect(() => {

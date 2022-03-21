@@ -50,7 +50,6 @@ export function BoardContextProvider({ children }: BoardProviderProps) {
   const cookies = parseCookies();
 
   const { boardId } = useParams();
-  console.log({ boardId });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,6 +62,8 @@ export function BoardContextProvider({ children }: BoardProviderProps) {
         if (!user) {
           return;
         }
+
+        setBoardInfos({ id: Number(boardId) });
 
         // const {
         //   data: { board },

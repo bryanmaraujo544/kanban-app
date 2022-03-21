@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+interface MemberImageProps {
+  isAdmin: boolean;
+}
+
 export const Container = styled.header`
   width: 100%;
   padding: 0 0 0 0.8rem;
@@ -35,14 +39,6 @@ export const Container = styled.header`
     .members {
       display: flex;
       gap: 0.4rem;
-
-      img {
-        width: 3.2rem;
-        height: 3.2rem;
-        border-radius: 50%;
-        position: relative;
-        object-fit: cover;
-      }
     }
 
     .invite-member-btn {
@@ -92,4 +88,13 @@ export const Container = styled.header`
       transition: all 0.2s ease-in;
     }
   }
+`;
+
+export const MemberImage = styled.img<MemberImageProps>`
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 50%;
+  position: relative;
+  object-fit: cover;
+  border: ${({ isAdmin }) => (isAdmin ? '3px solid #ffc300' : '0')};
 `;

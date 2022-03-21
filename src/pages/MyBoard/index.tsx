@@ -22,6 +22,7 @@ export const MyBoard = () => {
   const [membersInvited, setMembersInvited] = useState([]);
   const [user, setUser] = useState({} as User);
   const [isLoading, setIsLoading] = useState(true);
+  const [collaborators, setCollaborators] = useState([]);
 
   const cookies = parseCookies();
   const navigate = useNavigate();
@@ -37,6 +38,7 @@ export const MyBoard = () => {
       const {
         data: { collaborators },
       } = await api.get(`/collaborators/${boardId}`);
+      setCollaborators(collaborators);
 
       const isOneOfMyBoards = collaborators.some(
         ({ user }: any) => user.id === userDecoded.id
@@ -59,7 +61,7 @@ export const MyBoard = () => {
     <BoardContextProvider>
       <Container>
         <Header
-          membersInvited={membersInvited}
+          collaborators={collaborators}
           user={user}
           setIsModalOpen={setIsModalOpen}
         />

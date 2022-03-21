@@ -14,9 +14,6 @@ const socket = io('http://localhost:5000');
 
 function App() {
   console.log(socket);
-  useEffect(() => {
-    console.log('oi');
-  }, []);
   return (
     <>
       <StyledToastContainer
