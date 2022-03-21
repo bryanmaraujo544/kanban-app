@@ -100,9 +100,7 @@ export const InviteMembers = ({
     // and in server emit an members invited action and in client receive this
     // action and show the notification if the id is equal to the id in invitation
     membersSelectedToInvite.forEach(async (member: User) => {
-      const {
-        data: { collaboratorAdded },
-      } = await api.post('/collaborators', {
+      await api.post('/collaborators', {
         userId: member.id,
         boardId: boardInfos.id,
       });
