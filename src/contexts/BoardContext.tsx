@@ -6,6 +6,7 @@ import { useState, createContext, ReactNode, useEffect, useRef } from 'react';
 import jwt_decode from 'jwt-decode';
 import { parseCookies } from 'nookies';
 
+import { useNavigate, useParams } from 'react-router-dom';
 import api from '../services/utils/ApiClient';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 // import { useLocalStorage } from '../hooks/useLocalStorage';
@@ -48,9 +49,16 @@ export function BoardContextProvider({ children }: BoardProviderProps) {
   const [boardInfos, setBoardInfos] = useState({} as any);
   const cookies = parseCookies();
 
+  const { boardId } = useParams();
+  console.log({ boardId });
+  const navigate = useNavigate();
+
   useEffect(() => {
     (async () => {
       try {
+        if (boardId === undefined || boardId === null) {
+          navigate('/login');
+        }
         const user = jwt_decode(cookies?.token) as any;
         if (!user) {
           return;
@@ -59,15 +67,15 @@ export function BoardContextProvider({ children }: BoardProviderProps) {
         const {
           data: { board },
         } = await api.get(`/boards/${user?.id}`);
-        setBoardInfos(board);
+        setBoardInfos({ id: Number(boardId) });
 
         const {
           data: { columns },
-        } = await api.get(`/columns/${board.id}`);
+        } = await api.get(`/columns/${Number(boardId)}`);
 
         const {
           data: { tasks },
-        } = await api.get(`/tasks/${board.id}`);
+        } = await api.get(`/tasks/${Number(boardId)}`);
         setAllTasks(tasks);
 
         const columnsWithTasksIds = columns.map((column: any) => {
@@ -84,7 +92,7 @@ export function BoardContextProvider({ children }: BoardProviderProps) {
 
         const {
           data: { columnsOrder },
-        } = await api.get(`/columns-order/${board.id}`);
+        } = await api.get(`/columns-order/${boardId}`);
 
         const columnsId = columnsOrder.map((column: any) => column.column_id);
         setColumnsOrder(columnsId);

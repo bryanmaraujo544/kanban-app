@@ -1,4 +1,7 @@
+import { destroyCookie } from 'nookies';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { FiLogOut } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 import { Container } from './styles';
 
 interface Props {
@@ -8,10 +11,14 @@ interface Props {
 }
 
 export const Header = ({ user, membersInvited, setIsModalOpen }: Props) => {
-  console.log('Header');
-
+  const navigate = useNavigate();
   function handleSearchMember() {
     setIsModalOpen(true);
+  }
+
+  async function handleLogout() {
+    await destroyCookie(null, 'token');
+    navigate('/login');
   }
 
   return (
@@ -33,6 +40,16 @@ export const Header = ({ user, membersInvited, setIsModalOpen }: Props) => {
         >
           <AiOutlinePlus className="icon" />
           Invite Members
+        </button>
+        <button
+          type="button"
+          className="my-boards"
+          onClick={() => navigate('/')}
+        >
+          My Boards
+        </button>
+        <button type="button" className="logout-btn" onClick={handleLogout}>
+          <FiLogOut className="logout-icon" />
         </button>
       </div>
     </Container>

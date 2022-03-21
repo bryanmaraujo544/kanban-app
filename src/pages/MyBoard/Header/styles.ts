@@ -66,5 +66,30 @@ export const Container = styled.header`
         font-size: 1.6rem;
       }
     }
+
+    .logout-btn {
+      border: none;
+      background: none;
+
+      .logout-icon {
+        font-size: 2.2rem;
+      }
+    }
+
+    .my-boards {
+      background: #ced4da;
+      color: #495057;
+      border: 0;
+      background: #ced4da;
+      color: #495057;
+      border-radius: 0.4rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease-in;
+    }
   }
 `;

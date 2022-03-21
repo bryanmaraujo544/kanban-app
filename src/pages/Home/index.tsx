@@ -1,60 +1,72 @@
 /* eslint-disable camelcase */
 import { useEffect, useState } from 'react';
-import { parseCookies } from 'nookies';
+import { AiFillCrown } from 'react-icons/ai';
+import { IoEnter } from 'react-icons/io5';
 import jwt_decode from 'jwt-decode';
+import { parseCookies } from 'nookies';
 
 import { useNavigate } from 'react-router-dom';
-import { BoardContextProvider } from '../../contexts/BoardContext';
-import { Container } from './styles';
-import { Board } from '../../components/Board';
-import { InviteMembers } from '../../components/InviteMembers';
-import { Header } from './Header';
+import api from '../../services/utils/ApiClient';
 
-interface User {
+import { Container, BoardsContainer, Board } from './styles';
+
+interface BoardAdmin {
   id: number;
+  email: string;
+  photo_url: string;
   name: string;
-  profileImageUrl: string;
+}
+interface BoardProps {
+  id: number;
+  admin_id: number;
+  user: BoardAdmin;
+}
+interface MyBoard {
+  id: number;
+  user_id: number;
+  board_id: number;
+  board: BoardProps;
 }
 
 export const Home = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [membersInvited, setMembersInvited] = useState([]);
-  const [user, setUser] = useState({} as User);
-  const [isLoading, setIsLoading] = useState(true);
-
+  const [user, setUser] = useState({} as any);
+  const [myBoards, setMyBoards] = useState([]);
   const cookies = parseCookies();
+  console.log({ user, myBoards });
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!cookies.token) {
-      navigate('/login');
-      return;
-    }
-
-    setUser(jwt_decode(cookies.token));
-    setIsLoading(false);
+    (async () => {
+      if (!cookies.token) {
+        navigate('/login');
+      }
+      const userDecoded = jwt_decode(cookies.token) as any;
+      const { data } = await api.get(`/collaborators/board/${userDecoded.id}`);
+      setMyBoards(data);
+      setUser(userDecoded);
+    })();
   }, []);
 
-  if (isLoading) {
-    return <h1>Loading</h1>;
-  }
-
   return (
-    <BoardContextProvider>
-      <Container>
-        <Header
-          membersInvited={membersInvited}
-          user={user}
-          setIsModalOpen={setIsModalOpen}
-        />
-        <Board />
-        <InviteMembers
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-          setMembersInvited={setMembersInvited}
-          membersInvited={membersInvited}
-        />
-      </Container>
-    </BoardContextProvider>
+    <Container>
+      <header className="header">
+        <h1 className="title">My Boards</h1>
+      </header>
+      <BoardsContainer>
+        {myBoards.map((myBoard: MyBoard) => (
+          <Board className="board">
+            <div className="admin-infos">
+              <img src={myBoard.board.user.photo_url} alt="" />
+              <p className="admin-name">{myBoard.board.user.name}</p>
+              <AiFillCrown className="crown-icon" />
+            </div>
+            <IoEnter
+              className="enter-icon"
+              onClick={() => navigate(`/board/${myBoard.board_id}`)}
+            />
+          </Board>
+        ))}
+      </BoardsContainer>
+    </Container>
   );
 };

@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
+// import jwtDecode from 'jwt-decode';
 import { setCookie } from 'nookies';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -33,7 +34,9 @@ export const Login = () => {
       }
 
       setCookie(null, 'token', data.token);
-      navigate('/');
+
+      // const userDecoded: any = jwtDecode(data.token as any);
+      navigate(`/`);
     } catch (err: any) {
       setIsLoading(false);
       toast.error(err.response.data.message);
