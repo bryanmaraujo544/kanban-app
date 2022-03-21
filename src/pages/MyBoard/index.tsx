@@ -33,14 +33,20 @@ export const MyBoard = () => {
         navigate('/login');
         return;
       }
+      const userDecoded = jwt_decode(cookies.token) as any;
+      const {
+        data: { collaborators },
+      } = await api.get(`/collaborators/${boardId}`);
 
-      const { data: collaborators } = await api.get(
-        `/collaborators/${boardId}`
+      const isOneOfMyBoards = collaborators.some(
+        ({ user }: any) => user.id === userDecoded.id
       );
-      console.log({ collaborators });
-      // const isOneOfMyBoards = collaborators.
 
-      setUser(jwt_decode(cookies.token));
+      if (!isOneOfMyBoards) {
+        navigate('/');
+      }
+
+      setUser(userDecoded);
       setIsLoading(false);
     })();
   }, []);

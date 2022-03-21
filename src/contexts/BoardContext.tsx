@@ -64,10 +64,10 @@ export function BoardContextProvider({ children }: BoardProviderProps) {
           return;
         }
 
-        const {
-          data: { board },
-        } = await api.get(`/boards/${user?.id}`);
-        setBoardInfos({ id: Number(boardId) });
+        // const {
+        //   data: { board },
+        // } = await api.get(`/boards/${user?.id}`);
+        // setBoardInfos({ id: Number(boardId) });
 
         const {
           data: { columns },
