@@ -2,8 +2,9 @@
 import { useEffect, useState } from 'react';
 import { AiFillCrown } from 'react-icons/ai';
 import { IoEnter } from 'react-icons/io5';
+import { FiLogOut } from 'react-icons/fi';
 import jwt_decode from 'jwt-decode';
-import { parseCookies } from 'nookies';
+import { destroyCookie, parseCookies } from 'nookies';
 
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/utils/ApiClient';
@@ -46,10 +47,19 @@ export const Home = () => {
     })();
   }, []);
 
+  async function handleLogout() {
+    await destroyCookie(null, 'token');
+    navigate('/login');
+  }
+
   return (
     <Container>
       <header className="header">
         <h1 className="title">My Boards</h1>
+        <button type="button" className="logout-btn" onClick={handleLogout}>
+          <FiLogOut className="logout-icon" />
+          Logout
+        </button>
       </header>
       <BoardsContainer>
         {myBoards.map((myBoard: MyBoard) => (

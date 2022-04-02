@@ -3,8 +3,10 @@ import { useState, useEffect, useContext } from 'react';
 import { GrFormClose } from 'react-icons/gr';
 import { motion } from 'framer-motion';
 import { AiOutlinePlus } from 'react-icons/ai';
+import jwtDecode from 'jwt-decode';
 
 import { toast } from 'react-toastify';
+import { parseCookies } from 'nookies';
 import { Container, MembersFound, MemberFound } from './styles';
 import { Modal } from '../Modal';
 import api from '../../services/utils/ApiClient';
@@ -39,6 +41,9 @@ export const InviteMembers = ({
   const [membersFound, setMembersFound] = useState([] as any);
   const { boardInfos } = useContext(BoardContext);
 
+  const cookies = parseCookies();
+  const adminUser = jwtDecode(cookies?.token) as any;
+
   useEffect(() => {
     (async () => {
       const {
@@ -51,8 +56,9 @@ export const InviteMembers = ({
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      const members = allUsers.filter((user: User) =>
-        user.email.includes(memberEmail)
+      const members = allUsers.filter(
+        (user: User) =>
+          user.email.includes(memberEmail) && user.id !== adminUser.id
       );
 
       setMembersFound(members);

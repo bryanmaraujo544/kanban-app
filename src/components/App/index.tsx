@@ -13,6 +13,7 @@ const socket = io('http://localhost:5000');
 
 function App() {
   console.log(socket);
+
   return (
     <>
       <StyledToastContainer

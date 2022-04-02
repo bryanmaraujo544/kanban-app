@@ -9,11 +9,27 @@ export const Container = styled.div`
   .header {
     border-bottom: 0.1rem solid #ced4da;
     padding: 1.6rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 
     .title {
       font-size: 2.8rem;
       color: #343a40;
       font-weight: 700;
+    }
+
+    button {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      border: 0;
+      background: #ced4da;
+      border-radius: 0.4rem;
+      padding: 0.8rem 2rem;
+      font-weight: 700;
+      font-size: 1.4rem;
     }
   }
 `;
