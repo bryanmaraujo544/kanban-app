@@ -1,6 +1,6 @@
 // import { ToastContainer } from 'react-toastify';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 import { StyledToastContainer } from '../StyledToastContainer';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -9,11 +9,9 @@ import { Register } from '../../pages/Register';
 import { Login } from '../../pages/Login';
 import { MyBoard } from '../../pages/MyBoard';
 
-const socket = io('http://localhost:5000');
+// const socket = io('http://localhost:5000');
 
 function App() {
-  console.log(socket);
-
   return (
     <>
       <StyledToastContainer

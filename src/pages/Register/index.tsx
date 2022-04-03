@@ -22,11 +22,6 @@ export const Register = () => {
     formState: { errors },
   } = useForm<Inputs>();
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   if (isLoading) {
-  //     toast('Registering...', { autoClose: 20000 });
-  //   }
-  // }, [isLoading]);
 
   const onSubmit: SubmitHandler<Inputs> = async ({
     name,
