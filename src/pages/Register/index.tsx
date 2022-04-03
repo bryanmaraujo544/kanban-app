@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable react/jsx-props-no-spreading */
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -21,6 +22,11 @@ export const Register = () => {
     formState: { errors },
   } = useForm<Inputs>();
   const navigate = useNavigate();
+  // useEffect(() => {
+  //   if (isLoading) {
+  //     toast('Registering...', { autoClose: 20000 });
+  //   }
+  // }, [isLoading]);
 
   const onSubmit: SubmitHandler<Inputs> = async ({
     name,
@@ -28,21 +34,39 @@ export const Register = () => {
     email,
     password,
   }) => {
-    setIsLoading(true);
-    const noPhotoUrl = 'https://i.stack.imgur.com/l60Hf.png';
-    const { data } = await api.post('/auth/register', {
-      name,
-      profileImageUrl: photoUrl || noPhotoUrl,
-      email,
-      password,
-    });
-    setIsLoading(false);
+    try {
+      setIsLoading(true);
+      const noPhotoUrl = 'https://i.stack.imgur.com/l60Hf.png';
 
-    if (!data.user) {
-      toast.error(data.message);
-      return;
+      if (name.length >= 64) return window.alert('Name too long');
+      if (photoUrl.length >= 256) return window.alert('Photo URL too long');
+      if (email.length >= 128) return window.alert('Email too long.');
+
+      const registerPromise = api.post('/auth/register', {
+        name,
+        profileImageUrl: photoUrl || noPhotoUrl,
+        email,
+        password,
+      });
+
+      toast.promise(registerPromise, {
+        error: 'Something got wrong',
+        pending: 'Registering...',
+        success: 'Registered!',
+      });
+
+      const { data } = await registerPromise;
+
+      setIsLoading(false);
+
+      if (!data.user) {
+        toast.error(data.message);
+        return;
+      }
+      navigate('/login');
+    } catch (err: any) {
+      window.alert(err?.response?.data?.message);
     }
-    navigate('/login');
   };
 
   return (
