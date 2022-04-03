@@ -2,8 +2,11 @@
 
 <!---Esses são exemplos. Veja https://shields.io para outras pessoas ou para personalizar este conjunto de escudos. Você pode querer incluir dependências, status do projeto e informações de licença aqui--->
 
-![Animation](https://user-images.githubusercontent.com/62571814/152456153-e7baff20-2414-4f97-b94e-4f0893abda57.gif)
-![Animation](https://user-images.githubusercontent.com/62571814/152456605-51515178-ad0f-4212-983b-ed5c4b618003.gif)
+![Animation](https://user-images.githubusercontent.com/62571814/161432889-df009922-e3d7-4c8c-9182-3dcdfcbc4550.gif)
+
+
+## Inviting members
+![Animation](https://user-images.githubusercontent.com/62571814/161433156-3267b59a-c435-4bd1-845a-a2056d879e9f.gif)
 
 > Application for users create and access columns and tasks. They can invite other members to their boards and access other boards if they got invited.
 
