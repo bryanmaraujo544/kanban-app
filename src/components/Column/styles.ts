@@ -14,7 +14,7 @@ export const Container = styled.div`
   background: #fff;
   border-radius: 0.4rem;
 
-  @media (max-width: 468px) {
+  @media (max-width: 768px) {
     min-width: 22rem;
   }
 
