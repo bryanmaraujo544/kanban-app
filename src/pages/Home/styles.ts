@@ -30,6 +30,11 @@ export const Container = styled.div`
       padding: 0.8rem 2rem;
       font-weight: 700;
       font-size: 1.4rem;
+      transition: all 0.2s ease-in;
+
+      &:hover {
+        background: #adb5bd;
+      }
     }
   }
 `;

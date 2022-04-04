@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { destroyCookie } from 'nookies';
-import { AiOutlinePlus } from 'react-icons/ai';
+import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai';
 import { FiLogOut } from 'react-icons/fi';
+import { HiMenuAlt3 } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
+
 import { Container, MemberImage } from './styles';
 
 interface Props {
@@ -30,6 +33,8 @@ interface Member {
 }
 
 export const Header = ({ user, collaborators, setIsModalOpen }: Props) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const navigate = useNavigate();
   const boardAdminId = collaborators[0].board.admin_id;
 
@@ -47,12 +52,18 @@ export const Header = ({ user, collaborators, setIsModalOpen }: Props) => {
   }
 
   return (
-    <Container>
+    <Container isMenuOpen={isMenuOpen}>
       <div className="user-infos">
         <p>{user?.name}</p>
         <img src={user?.profileImageUrl} alt="user profile" />
       </div>
+
+      <HiMenuAlt3 className="menu-icon" onClick={() => setIsMenuOpen(true)} />
       <div className="right-actions">
+        <AiOutlineClose
+          className="close-menu"
+          onClick={() => setIsMenuOpen(false)}
+        />
         <div className="members">
           {collaborators?.map((member: Member) => (
             <MemberImage
