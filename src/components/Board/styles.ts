@@ -7,8 +7,17 @@ export const Container = styled.main`
   overflow-y: hidden;
   overflow-x: scroll;
 
+  @media (max-width: 768px) {
+    height: 100vh;
+    padding: 3.2rem 0;
+  }
+
   ::-webkit-scrollbar {
     height: 1rem;
+
+    @media (max-width: 768px) {
+      height: 1.6rem;
+    }
   }
 
   ::-webkit-scrollbar-track {
@@ -17,6 +26,10 @@ export const Container = styled.main`
   ::-webkit-scrollbar-thumb {
     background: #adb5bd;
     border-radius: 0.4rem;
+
+    @media (max-width: 768px) {
+      border-radius: 1.2rem;
+    }
 
     &:hover {
       background: #6c757d;

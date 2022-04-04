@@ -14,6 +14,7 @@ export const Container = styled.header<ContainerProps>`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  overflow: hidden;
 
   .user-infos {
     display: flex;
@@ -47,15 +48,19 @@ export const Container = styled.header<ContainerProps>`
     display: flex;
     align-items: center;
     gap: 1.6rem;
-    transition: all 0.2s linear;
+    transition: transform 0.2s linear;
 
     @media (max-width: 600px) {
       flex-direction: column;
       position: absolute;
-      right: ${({ isMenuOpen }) => (isMenuOpen ? '0' : '-100%')};
+      /* right: ${({ isMenuOpen }) => (isMenuOpen ? '0' : '-100px')}; */
+      right: 0;
+      transform: ${({ isMenuOpen }) =>
+        isMenuOpen ? 'translate(0%)' : 'translate(100%)'};
+
       top: 0;
       padding: 3.2rem 2.4rem;
-      height: 100vh;
+      height: 100%;
       background: #fff;
     }
 

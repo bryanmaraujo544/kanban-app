@@ -15,7 +15,15 @@ export const Container = styled.div`
   border-radius: 0.4rem;
 
   @media (max-width: 768px) {
-    min-width: 22rem;
+    min-width: 26rem;
+  }
+
+  @media (max-width: 468px) {
+    min-width: 24rem;
+  }
+
+  @media (max-width: 300px) {
+    min-width: 20rem;
   }
 
   .header {

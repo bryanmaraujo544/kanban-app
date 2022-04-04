@@ -8,4 +8,5 @@ export const Container = styled.div`
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
+  width: 100%;
 `;

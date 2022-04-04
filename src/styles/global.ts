@@ -8,6 +8,12 @@ const global = createGlobalStyle`
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
+  body {
+    width: 100%;
+    max-width: 100vh;
+    overflow: hidden;
+  }
+
   html {
     font-size: 62.5%;
 
@@ -20,15 +26,15 @@ const global = createGlobalStyle`
     }
 
     @media (max-width: 980px) {
-      font-size: 10px;
+      font-size: 11px;
     }
 
     @media (max-width: 768px) {
-      font-size: 9px;
+      font-size: 10px;
     }
 
     @media (max-width: 468px) {
-      font-size: 8px;
+      font-size: 9px;
     }
   }
 
