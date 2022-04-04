@@ -9,7 +9,8 @@ import { destroyCookie, parseCookies } from 'nookies';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/utils/ApiClient';
 
-import { Container, BoardsContainer, Board } from './styles';
+import { Container, BoardsContainer, Board, LogoutButtons } from './styles';
+import { Modal } from '../../components/Modal';
 
 interface BoardAdmin {
   id: number;
@@ -32,6 +33,8 @@ interface MyBoard {
 export const Home = () => {
   const [, setUser] = useState({} as any);
   const [myBoards, setMyBoards] = useState([]);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
   const cookies = parseCookies();
   const navigate = useNavigate();
 
@@ -48,15 +51,24 @@ export const Home = () => {
   }, []);
 
   async function handleLogout() {
+    setIsLogoutModalOpen(false);
     await destroyCookie(null, 'token');
     navigate('/login');
+  }
+
+  async function handleOpenLogouModal() {
+    setIsLogoutModalOpen(true);
   }
 
   return (
     <Container>
       <header className="header">
         <h1 className="title">My Boards</h1>
-        <button type="button" className="logout-btn" onClick={handleLogout}>
+        <button
+          type="button"
+          className="logout-btn"
+          onClick={handleOpenLogouModal}
+        >
           <FiLogOut className="logout-icon" />
           Logout
         </button>
@@ -76,6 +88,20 @@ export const Home = () => {
           </Board>
         ))}
       </BoardsContainer>
+      <Modal
+        isOpen={isLogoutModalOpen}
+        modalTitle="Do you want logout?"
+        setIsOpen={setIsLogoutModalOpen}
+      >
+        <LogoutButtons>
+          <button type="button" onClick={handleLogout}>
+            Yes
+          </button>
+          <button type="button" onClick={() => setIsLogoutModalOpen(false)}>
+            No
+          </button>
+        </LogoutButtons>
+      </Modal>
     </Container>
   );
 };

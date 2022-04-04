@@ -94,3 +94,27 @@ export const Board = styled.div`
     }
   }
 `;
+
+export const LogoutButtons = styled.div`
+  display: flex;
+  gap: 1.6rem;
+
+  button {
+    flex: 1;
+    height: 3.2rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    border: 0;
+    border-radius: 0.4rem;
+
+    &:nth-child(1) {
+      background: #ef233c;
+      color: #fff;
+    }
+
+    &:nth-child(2) {
+      background: #ced4da;
+      color: #495057;
+    }
+  }
+`;

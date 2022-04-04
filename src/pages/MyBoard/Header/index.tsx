@@ -5,7 +5,8 @@ import { FiLogOut } from 'react-icons/fi';
 import { HiMenuAlt3 } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 
-import { Container, MemberImage } from './styles';
+import { Container, MemberImage, LogoutButtons } from './styles';
+import { Modal } from '../../../components/Modal';
 
 interface Props {
   user: any;
@@ -34,6 +35,7 @@ interface Member {
 
 export const Header = ({ user, collaborators, setIsModalOpen }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const navigate = useNavigate();
   const boardAdminId = collaborators[0].board.admin_id;
@@ -43,8 +45,13 @@ export const Header = ({ user, collaborators, setIsModalOpen }: Props) => {
   }
 
   async function handleLogout() {
+    setIsLogoutModalOpen(false);
     await destroyCookie(null, 'token');
     navigate('/login');
+  }
+
+  async function handleOpenLogouModal() {
+    setIsLogoutModalOpen(true);
   }
 
   function checkIfUserIsBoardAdmin({ userId, adminId }: any) {
@@ -97,10 +104,28 @@ export const Header = ({ user, collaborators, setIsModalOpen }: Props) => {
         >
           My Boards
         </button>
-        <button type="button" className="logout-btn" onClick={handleLogout}>
+        <button
+          type="button"
+          className="logout-btn"
+          onClick={handleOpenLogouModal}
+        >
           <FiLogOut className="logout-icon" />
         </button>
       </div>
+      <Modal
+        isOpen={isLogoutModalOpen}
+        modalTitle="Do you want logout?"
+        setIsOpen={setIsLogoutModalOpen}
+      >
+        <LogoutButtons>
+          <button type="button" onClick={handleLogout}>
+            Yes
+          </button>
+          <button type="button" onClick={() => setIsLogoutModalOpen(false)}>
+            No
+          </button>
+        </LogoutButtons>
+      </Modal>
     </Container>
   );
 };
