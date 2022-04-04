@@ -8,11 +8,6 @@ const global = createGlobalStyle`
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
-  body {
-    width: 100%;
-    max-width: 100vh;
-    overflow: hidden;
-  }
 
   html {
     font-size: 62.5%;

@@ -14,7 +14,6 @@ export const Container = styled.header<ContainerProps>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  overflow: hidden;
 
   .user-infos {
     display: flex;
